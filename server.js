@@ -5,7 +5,13 @@ const Database = require('better-sqlite3');
 const querystring = require('querystring');
 
 // Configuración
-const PORT = 3000;
+//const PORT = 3000;
+
+const PORT = process.env.PORT || 3000;
+
+//app.listen(PORT, () => {
+//    console.log(`Servidor corriendo en el puerto ${PORT}`);
+//});
 const DB_PATH = path.join(__dirname, 'colegio.db');
 
 // Inicializar base de datos SQLite
@@ -456,7 +462,7 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-server.listen(PORT, () => {
+server.listen(PORT,'0.0.0.0', () => {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('🏛️  COLEGIO DE PROFESIONALES EN TURISMO');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
