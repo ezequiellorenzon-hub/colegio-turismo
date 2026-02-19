@@ -120,17 +120,17 @@ a {
 }
 
 /* ========================================
-   NAVBAR (GLASSMORPHISM)
+   NAVBAR - FIX PARA MUCHOS LINKS
    ======================================== */
 
 .navbar {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 16px 0;
+  padding: 10px 0; /* Un poco más delgada */
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -138,35 +138,48 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 15px; /* Espacio mínimo entre logo y menú */
 }
 
 .navbar-brand {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--white);
-  letter-spacing: -0.04em;
-}
-
-.navbar-brand span {
-  color: var(--primary);
+  flex-shrink: 0; /* Evita que el logo se achique */
+  max-width: 280px; /* Ajusta según el ancho de tu logo */
 }
 
 .navbar-menu {
   display: flex;
   list-style: none;
-  gap: 35px;
+  gap: 15px; /* Reducimos el espacio entre links para que entren todos */
   align-items: center;
+  flex-wrap: nowrap; /* Evita que se bajen a otra línea */
 }
 
 .navbar-menu a {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.85rem; /* Achicamos un pelín la letra para que quepan todos */
+  white-space: nowrap; /* Evita que el texto de un link se rompa en dos líneas */
 }
 
-.navbar-menu a:hover,
-.navbar-menu a.active {
-  color: var(--white);
+/* El botón Admin - le damos un estilo especial para que destaque sin romper todo */
+.navbar-menu .btn-admin {
+  background: var(--accent);
+  color: var(--dark) !important;
+  padding: 6px 15px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Ocultar el icono extraño si es que no lo necesitas ahí */
+.navbar-toggle {
+  display: none; 
+}
+
+@media (max-width: 1100px) {
+  /* Si la pantalla no es gigante, achicamos aún más los espacios */
+  .navbar-menu { gap: 10px; }
+  .navbar-menu a { font-size: 0.75rem; }
 }
 
 /* ========================================
