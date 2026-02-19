@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colegio de Profesionales en Turismo</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        /* Hero Gallery Styles */
+        .hero-gallery {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .gallery-container {
+            position: relative;
+            height: 100%;
+        }
+        
+        .gallery-slides {
+            position: relative;
+            height: 100%;
+        }
+        
+        .gallery-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gallery-slide.active {
+            opacity: 1;
+            z-index: 1;
+        }
+        
+        .slide-content {
+            width: 100%;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .slide-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .slide-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .gallery-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .gallery-nav.prev {
+            left: 20px;
+        }
+        
+        .gallery-nav.next {
+            right: 20px;
+        }
+        
+        .gallery-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background: white;
+            width: 30px;
+            border-radius: 6px;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-gallery {
+                height: 400px;
+            }
+            
+            .slide-content h1 {
+                font-size: 2rem;
+            }
+            
+            .slide-content p {
+                font-size: 1.1rem;
+            }
+            
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
+            </a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="/" class="active">Inicio</a></li>
+                <li><a href="/el-colegio.html">El Colegio</a></li>
+                <li><a href="/noticias.html">Noticias</a></li>
+                <li><a href="/comision.html">Comisión Directiva</a></li>
+                <li><a href="/matriculados.html">Matriculados</a></li>
+                <li><a href="/contacto.html">Contacto</a></li>
+                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Gallery -->
+    <section class="hero-gallery">
+        <div class="gallery-container">
+            <div class="gallery-slides" id="heroGallery">
+                <div class="gallery-slide active" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+                    <div class="slide-content">
+                        <div class="container">
+                            <h1>Cargando noticias...</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="gallery-nav prev" onclick="prevSlide()">‹</button>
+            <button class="gallery-nav next" onclick="nextSlide()">›</button>
+            <div class="gallery-dots" id="galleryDots"></div>
+        </div>
+    </section>
+
+    <!-- Institucional Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Nuestra Institución</h2>
+            <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="card">
+                    <div class="card-content" style="text-align: center;">
+                        <h3 class="card-title">Misión</h3>
+                        <p class="card-text">Regular el ejercicio profesional del turismo, promoviendo la ética y excelencia en el sector.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content" style="text-align: center;">
+                        <h3 class="card-title">Visión</h3>
+                        <p class="card-text">Ser referentes en la formación y regulación de profesionales del turismo en Argentina.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content" style="text-align: center;">
+                        <h3 class="card-title">Valores</h3>
+                        <p class="card-text">Ética profesional, compromiso con la calidad y desarrollo sustentable del turismo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Últimas Noticias -->
+    <section class="section" style="background: var(--light-gray);">
+        <div class="container">
+            <h2 class="section-title">Últimas Noticias</h2>
+            <p class="section-subtitle">Mantente informado sobre las novedades del colegio</p>
+            
+            <div id="featured-news" class="cards-grid">
+                <div class="loading">Cargando noticias</div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="/noticias.html" class="btn btn-primary">Ver Todas las Noticias</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Servicios para Colegiados</h2>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Matriculación</h3>
+                        <p class="card-text">Tramitá tu matrícula profesional y mantené tu registro actualizado.</p>
+                        <a href="/contacto.html" class="btn btn-secondary">Más Información</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Capacitación</h3>
+                        <p class="card-text">Accedé a cursos y seminarios para tu desarrollo profesional continuo.</p>
+                        <a href="/contacto.html" class="btn btn-secondary">Consultar Cursos</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        <h3 class="card-title">Asesoramiento</h3>
+                        <p class="card-text">Recibí apoyo y orientación en cuestiones profesionales y legales.</p>
+                        <a href="/contacto.html" class="btn btn-secondary">Solicitar Asesoría</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Colegio de Profesionales en Turismo</h3>
+                    <p>Entidad reguladora del ejercicio profesional del turismo en Argentina.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <a href="/el-colegio.html">El Colegio</a>
+                    <a href="/noticias.html">Noticias</a>
+                    <a href="/comision.html">Comisión Directiva</a>
+                    <a href="/matriculados.html">Matriculados</a>
+                    <a href="/contacto.html">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f891969e97b89b97949d9f91978c8d8a918b9597d6978a9fd6998a">[email&#160;protected]</a></p>
+                    <p>Teléfono: +54 11 4567-8900</p>
+                    <p>Dirección: Av. Corrientes 1234, CABA</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        let currentSlide = 0;
+        let heroNews = [];
+        let autoSlideInterval;
+
+        async function loadHeroGallery() {
+            try {
+                const response = await fetch('/api/news/featured');
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                
+                heroNews = await response.json();
+                
+                console.log('Noticias cargadas:', heroNews);
+                
+                if (!heroNews || heroNews.length === 0) {
+                    heroNews = [{
+                        title: 'Colegio de Profesionales en Turismo',
+                        excerpt: 'Promoviendo la excelencia en el turismo argentino desde 1985',
+                        image_url: ''
+                    }];
+                }
+                
+                displayHeroGallery();
+                startAutoSlide();
+            } catch (error) {
+                console.error('Error al cargar galería:', error);
+                // Usar contenido por defecto si falla
+                heroNews = [{
+                    title: 'Colegio de Profesionales en Turismo',
+                    excerpt: 'Promoviendo la excelencia en el turismo argentino desde 1985',
+                    image_url: ''
+                }];
+                displayHeroGallery();
+            }
+        }
+
+        function displayHeroGallery() {
+            const gallery = document.getElementById('heroGallery');
+            const dots = document.getElementById('galleryDots');
+            
+            console.log('displayHeroGallery - heroNews:', heroNews);
+            console.log('gallery element:', gallery);
+            console.log('dots element:', dots);
+            
+            if (!gallery || !dots) {
+                console.error('No se encontraron los elementos de la galería');
+                return;
+            }
+            
+            gallery.innerHTML = heroNews.map((news, index) => {
+                console.log(`Procesando noticia ${index}:`, news);
+                return `
+                <div class="gallery-slide ${index === 0 ? 'active' : ''}" style="background-image: ${news.image_url ? `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url(${news.image_url})` : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'};">
+                    <div class="slide-content">
+                        <div class="container">
+                            <h1>${escapeHtml(news.title)}</h1>
+                            <p>${escapeHtml(news.excerpt || news.content?.substring(0, 150) || '')}${news.excerpt || news.content ? '...' : ''}</p>
+                            ${news.id ? `<a href="/noticias.html" class="btn btn-primary" style="background: var(--accent); border: none;">Leer Más</a>` : `<a href="/matriculados.html" class="btn btn-secondary">Ver Profesionales</a>`}
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            
+            dots.innerHTML = heroNews.map((_, index) => `
+                <span class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>
+            `).join('');
+            
+            console.log('Galería renderizada exitosamente');
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % heroNews.length;
+            updateSlides();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + heroNews.length) % heroNews.length;
+            updateSlides();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlides();
+        }
+
+        function updateSlides() {
+            const slides = document.querySelectorAll('.gallery-slide');
+            const dots = document.querySelectorAll('.dot');
+            
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function startAutoSlide() {
+            if (heroNews.length > 1) {
+                autoSlideInterval = setInterval(nextSlide, 5000);
+            }
+        }
+
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.gallery-nav');
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    stopAutoSlide();
+                    setTimeout(startAutoSlide, 10000);
+                });
+            });
+        });
+
+        async function loadFeaturedNews() {
+            try {
+                const response = await fetch('/api/news/featured');
+                const news = await response.json();
+                
+                const container = document.getElementById('featured-news');
+                
+                if (news.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--gray);">No hay noticias</p>';
+                    return;
+                }
+                
+                container.innerHTML = news.map(item => `
+                    <div class="card fade-in">
+                        ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="card-image">` : '<div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
+                        <div class="card-content">
+                            <h3 class="card-title">${escapeHtml(item.title)}</h3>
+                            <p class="card-text">${escapeHtml(item.excerpt || item.content.substring(0, 150))}...</p>
+                            <div class="card-meta">
+                                <span>Autor: ${escapeHtml(item.author)}</span>
+                                <span>${formatDate(item.created_at)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Cargar al iniciar
+        loadHeroGallery();
+        loadFeaturedNews();
+    </script>
+</body>
+</html>

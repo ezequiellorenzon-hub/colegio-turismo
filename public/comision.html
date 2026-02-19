@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institucional - CPTBA</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--light-gray);
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        tr:hover {
+            background: var(--light-gray);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
+            </a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="/" class="active">Inicio</a></li>
+                <li><a href="/el-colegio.html">El Colegio</a></li>
+                <li><a href="/noticias.html">Noticias</a></li>
+                <li><a href="/comision.html">Comisión Directiva</a></li>
+                <li><a href="/matriculacion.html">Matriculación</a></li>
+                <li><a href="/matriculados.html">Matriculados</a></li>
+                <li><a href="/contacto.html">Contacto</a></li>
+                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">Institucional</h1>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('autoridades')">Autoridades</button>
+                <button class="tab" onclick="showTab('organos')">Órganos de Gobierno</button>
+                <button class="tab" onclick="showTab('transparencia')">Transparencia</button>
+                <button class="tab" onclick="showTab('relaciones')">Relaciones Institucionales</button>
+            </div>
+
+            <!-- Tab: Autoridades -->
+            <div id="autoridades" class="tab-content active">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Consejo Directivo 2024-2026</h2>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Cargo</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre</th>
+                                        <th>Matrícula</th>
+                                        <th>Categoría</th>
+                                        <th>Delegación/Zona</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="consejo-directivo-tbody">
+                                    <!-- Se carga dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Comisión Revisora de Cuentas 2024-2026</h2>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Cargo</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre</th>
+                                        <th>Matrícula</th>
+                                        <th>Categoría</th>
+                                        <th>Delegación/Zona</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comision-revisora-tbody">
+                                    <!-- Se carga dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Tribunal de Ética Profesional 2024-2028</h2>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Cargo</th>
+                                        <th>Apellido</th>
+                                        <th>Nombre</th>
+                                        <th>Matrícula</th>
+                                        <th>Categoría</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tribunal-etica-tbody">
+                                    <!-- Se carga dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Órganos de Gobierno -->
+            <div id="organos" class="tab-content">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Requisitos para ser miembro</h2>
+                        <p style="line-height: 1.8; margin-bottom: 15px;">
+                            Para ser miembro de los Órganos de Gobierno del Colegio, se debe:
+                        </p>
+                        <ul style="margin-left: 30px; line-height: 1.8;">
+                            <li>Estar matriculado y tener la matrícula vigente</li>
+                            <li>No estar procesado penalmente ni haber sido condenado por delito doloso</li>
+                            <li>No estar inhabilitado para ejercer en colegios profesionales de turismo</li>
+                            <li>No haber sido sancionado por el Tribunal de Ética</li>
+                            <li>Antigüedad mínima de 2 años para Consejo Directivo y Comisión Revisora de Cuentas</li>
+                            <li>Antigüedad mínima de 6 años para Tribunal de Ética</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    <div class="card">
+                        <div class="card-content">
+                            <h3 style="color: var(--primary); margin-bottom: 15px;">Asamblea</h3>
+                            <p style="line-height: 1.8;">
+                                La Asamblea es la autoridad máxima del colegio y está constituida por todas las personas matriculadas. Se reúne ordinariamente una vez por año dentro de los 4 meses de concluido el ejercicio económico.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-content">
+                            <h3 style="color: var(--primary); margin-bottom: 15px;">Consejo Directivo</h3>
+                            <p style="line-height: 1.8;">
+                                Tiene facultades para otorgar y gestionar matrículas, representar a los colegiados, administrar el Colegio, dictar reglamentos y códigos de ética, establecer aranceles y gestionar bienes de la institución.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-content">
+                            <h3 style="color: var(--primary); margin-bottom: 15px;">Comisión Revisora de Cuentas</h3>
+                            <p style="line-height: 1.8;">
+                                Fiscaliza el movimiento patrimonial y financiero del Colegio, los registros contables y certifica los balances. Trata informes semestrales sobre la situación económica y financiera.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-content">
+                            <h3 style="color: var(--primary); margin-bottom: 15px;">Tribunal de Ética</h3>
+                            <p style="line-height: 1.8;">
+                                Ejerce el poder disciplinario del Colegio y aplica el Código de Ética sobre los matriculados, velando por el cumplimiento de las normas profesionales.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Transparencia -->
+            <div id="transparencia" class="tab-content">
+                <div class="card">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Transparencia en la Gestión</h2>
+                        <p style="line-height: 1.8; margin-bottom: 20px;">
+                            Como institución de derecho público, y por definición política de sus autoridades, el manejo y uso de los recursos del Colegio se realiza de forma transparente, conllevando la rendición de cuentas periódicamente tal como establece el estatuto de la institución.
+                        </p>
+                        <p style="line-height: 1.8; margin-bottom: 30px;">
+                            Se dispone aquí el acceso libre a dicha información, tanto de las Memorias Institucionales, como de los Balances Contables, y de las Resoluciones de la Comisión Revisora de Cuentas y de las Asambleas Ordinarias.
+                        </p>
+
+                        <div style="background: var(--light-gray); padding: 20px; border-radius: 8px;">
+                            <h3 style="margin-bottom: 15px;">Documentación disponible</h3>
+                            <p style="color: var(--gray); margin-bottom: 15px;">
+                                Los documentos de rendición de cuentas de años anteriores están disponibles en el sitio web oficial del CPTBA.
+                            </p>
+                            <a href="https://cptba.com.ar/sobre-nosotros/#transparencia" target="_blank" class="btn btn-primary">
+                                Ver Memorias y Balances
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Relaciones Institucionales -->
+            <div id="relaciones" class="tab-content">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Relaciones Institucionales</h2>
+                        <p style="line-height: 1.8; margin-bottom: 20px;">
+                            Desde el Colegio se lleva adelante un trabajo de articulación constante con distintas instituciones y organizaciones que forman parte de la actividad turística tanto en la provincia de Buenos Aires, como a nivel nacional.
+                        </p>
+
+                        <h3 style="color: var(--primary); margin: 30px 0 15px;">Participación en Espacios Federales</h3>
+                        <ul style="margin-left: 30px; line-height: 1.8; margin-bottom: 30px;">
+                            <li><strong>Espacio Federal de Colegios y Asociaciones Profesionales:</strong> Articulación con todos los Colegios Profesionales del país</li>
+                            <li><strong>Consejo Provincial de Turismo (COPROTUR):</strong> Espacio de la Ley Provincial de Turismo con representación del sector público, privado, académico y el Colegio</li>
+                        </ul>
+
+                        <h3 style="color: var(--primary); margin: 30px 0 15px;">Convenios de Cooperación</h3>
+                        <ul style="margin-left: 30px; line-height: 1.8; margin-bottom: 30px;">
+                            <li>Asociación Argentina de Ecoturismo y Turismo Aventura (AAETAV)</li>
+                            <li>Universidad Nacional de Mar del Plata</li>
+                            <li>Municipalidad de La Plata</li>
+                            <li>Municipalidad de General Pueyrredon</li>
+                            <li>Municipalidad de Escobar</li>
+                        </ul>
+
+                        <h3 style="color: var(--primary); margin: 30px 0 15px;">Articulación con Universidades</h3>
+                        <p style="line-height: 1.8;">
+                            Universidad Nacional de La Plata, del Centro, del Sur, de San Martín, de Morón, Atlántida Argentina, del Salvador, entre otras instituciones académicas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Delegación Mar del Plata</h2>
+                        <p style="line-height: 1.8; margin-bottom: 15px;">
+                            Desde la Delegación Regional Mar del Plata, se coordinan acciones en la zona de la Costa Atlántica desde San Clemente hasta Necochea y partidos mediterráneos vecinos.
+                        </p>
+                        <h3 style="margin-top: 20px; margin-bottom: 10px;">Participación activa en:</h3>
+                        <ul style="margin-left: 30px; line-height: 1.8;">
+                            <li>Ente Municipal de Turismo (EMTUR) - Consejo Asesor</li>
+                            <li>Universidad Nacional de Mar del Plata - Órganos de cogobierno</li>
+                            <li>Defensoría del Pueblo - Preservación Patrimonial</li>
+                            <li>Foro de Colegios y Consejos Profesionales</li>
+                            <li>Mar del Plata entre todos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Colegio de Profesionales en Turismo</h3>
+                    <p>Entidad reguladora del ejercicio profesional del turismo en la Provincia de Buenos Aires.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <a href="/el-colegio.html">El Colegio</a>
+                    <a href="/noticias.html">Noticias</a>
+                    <a href="/comision.html">Comisión Directiva</a>
+                    <a href="/matriculados.html">Matriculados</a>
+                    <a href="/matriculacion.html">Matriculación</a>
+                    <a href="/contacto.html">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1970777f76597a76757c7e70766d6c6b706a747637766b7e37786b">[email&#160;protected]</a></p>
+                    <p>Teléfono: +54 11 4567-8900</p>
+                    <p>Dirección: Av. Corrientes 1234, CABA</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Cargar datos dinámicamente desde la API
+        async function loadAutoridades() {
+            try {
+                // Cargar Consejo Directivo
+                const consejoRes = await fetch('/api/autoridades/consejo-directivo');
+                const consejoData = await consejoRes.json();
+                document.getElementById('consejo-directivo-tbody').innerHTML = consejoData.map(row => `
+                    <tr>
+                        <td>${row.cargo}</td>
+                        <td>${row.apellido}</td>
+                        <td>${row.nombre}</td>
+                        <td>${row.matricula}</td>
+                        <td>${row.categoria}</td>
+                        <td>${row.delegacion_zona}</td>
+                    </tr>
+                `).join('');
+
+                // Cargar Comisión Revisora
+                const comisionRes = await fetch('/api/autoridades/comision-revisora');
+                const comisionData = await comisionRes.json();
+                document.getElementById('comision-revisora-tbody').innerHTML = comisionData.map(row => `
+                    <tr>
+                        <td>${row.cargo}</td>
+                        <td>${row.apellido}</td>
+                        <td>${row.nombre}</td>
+                        <td>${row.matricula}</td>
+                        <td>${row.categoria}</td>
+                        <td>${row.delegacion_zona}</td>
+                    </tr>
+                `).join('');
+
+                // Cargar Tribunal de Ética
+                const tribunalRes = await fetch('/api/autoridades/tribunal-etica');
+                const tribunalData = await tribunalRes.json();
+                document.getElementById('tribunal-etica-tbody').innerHTML = tribunalData.map(row => `
+                    <tr>
+                        <td>${row.cargo}</td>
+                        <td>${row.apellido}</td>
+                        <td>${row.nombre}</td>
+                        <td>${row.matricula}</td>
+                        <td>${row.categoria}</td>
+                    </tr>
+                `).join('');
+
+                console.log('✅ Autoridades cargadas exitosamente');
+            } catch (error) {
+                console.error('Error al cargar autoridades:', error);
+                document.getElementById('consejo-directivo-tbody').innerHTML = 
+                    '<tr><td colspan="6" style="text-align: center; color: red;">Error al cargar datos</td></tr>';
+            }
+        }
+
+        // Cargar al iniciar la página
+        loadAutoridades();
+    </script>
+</body>
+</html>

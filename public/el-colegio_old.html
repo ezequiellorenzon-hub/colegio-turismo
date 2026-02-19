@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Colegio - CPTBA</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
+            </a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/el-colegio.html" class="active">El Colegio</a></li>
+                <li><a href="/noticias.html">Noticias</a></li>
+                <li><a href="/comision.html">Comisión Directiva</a></li>
+                <li><a href="/matriculados.html">Matriculados</a></li>
+                <li><a href="/contacto.html">Contacto</a></li>
+                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">El Colegio</h1>
+            
+            <div style="max-width: 900px; margin: 0 auto;">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">¿Qué somos?</h2>
+                        <p style="margin-bottom: 15px; line-height: 1.8;">
+                            Somos una institución de <strong>"Derecho Público No Estatal"</strong> creada por la <strong>Ley Provincial N° 14799 del año 2015</strong>. En su artículo número uno define "el ejercicio profesional de los Profesionales en Turismo en la provincia de Buenos Aires se rige por las disposiciones de la presente ley, y las normas y reglamentos que en consecuencia se dicten".
+                        </p>
+                        <p style="margin-bottom: 15px; line-height: 1.8;">
+                            Y en sus artículos número 6 y 7, manifiesta que "El Colegio tendrá como objeto regular el ejercicio profesional de los Profesionales en Turismo y para el mejor desempeño de sus fines, velará por el cumplimiento de la presente ley, ejercerá el gobierno de la matrícula, las facultades disciplinarias sobre sus colegiados, dictará el Código de Ética Profesional, y representará y defenderá a sus colegiados". "El Colegio tendrá como finalidad la defensa, el progreso y la jerarquización de la profesión, tendiente a asegurar la calidad y la sustentabilidad del sector".
+                        </p>
+                        <!--<p style="background: var(--light-gray); padding: 15px; border-radius: 5px; margin-top: 20px;">
+                            <strong>Más información:</strong> Consultá la <a href="assets/docs/Ley-No14799-Colegio-Prof-Turismo-1.pdf" target="_blank" style="color: var(--primary);">Ley Provincial N° 14799</a>
+                            <a href="assets/docs/CODIGO-ETICA-PROFESIONAL-Colegio.pdf" target="_blank" style="color: var(--primary);">Código de Ética</a>
+                            <a href="assets/docs/REGLAMENTO-INTERNO-ESTATUTO-Colegio.pdf" target="_blank" style="color: var(--primary);">Reglamento Interno</a>
+                        </p>-->
+                        <div style="background: var(--light-gray); padding: 15px; border-radius: 5px; margin-top: 20px; display: flex; flex-direction: column; align-items: border-left; gap: 4px; line-height: 1.2;">
+                            <strong style="margin-bottom: 5px; color: #333;">Más información:</strong>
+                                <a href="/assets/docs/Ley-No14799-Colegio-Prof-Turismo-1.pdf" target="_blank" download="Ley-Provincial-14799.pdf" style="color: var(--accent); text-decoration: none;">Ley N.º 14799 – Creación Colegio de Profesionales en Turismo</a>
+                                <a href="assets/docs/CODIGO-ETICA-PROFESIONAL-Colegio.pdf" target="_blank" style="color: var(--accent); text-decoration: none;">Código de Ética</a>
+                                <a href="assets/docs/REGLAMENTO-INTERNO-ESTATUTO-Colegio.pdf" target="_blank" style="color: var(--accent); text-decoration: none;">Reglamento Interno</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">¿Quiénes integramos obligatoriamente el Colegio?</h2>
+                        <p style="margin-bottom: 15px; line-height: 1.8;">
+                            Siguiendo la definición establecida en el artículo número dos: "A los efectos de la presente ley, se entiende por ejercicio profesional de turismo, el desempeño en forma individual, independiente o en relación de dependencia, en el ámbito público o privado, de actividades que requieran la aplicación de principios y conocimientos inherentes a la actividad turística, y exijan por ende la formación y capacitación específica. El profesional de turismo tendrá a su cargo y responsabilidad la aplicación de incumbencias profesionales asignadas al título habilitante que posea."
+                        </p>
+                        <p style="margin-bottom: 15px; line-height: 1.8;">
+                            Y en sus artículos 8, 9 y 10, especifica que <strong>"Es requisito indispensable para el ejercicio de la profesión en turismo, en cualquiera de sus modalidades estar inscripto en la matrícula, cuyo registro y control se encuentra a cargo del Colegio creado por la presente ley"</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2 style="color: var(--primary); margin-bottom: 20px;">Requisitos para la Matrícula</h2>
+                        <p style="margin-bottom: 15px; line-height: 1.8;">
+                            Podrán acceder a la matrícula obligatoria y consecuente habilitación para el ejercicio profesional en la provincia de Buenos Aires, las personas que posean:
+                        </p>
+                        <ul style="margin-left: 30px; margin-bottom: 20px; line-height: 1.8;">
+                            <li style="margin-bottom: 10px;">Título oficial de nivel Universitario nacional o provincial, de gestión estatal o privada</li>
+                            <li style="margin-bottom: 10px;">Título oficial de Institutos de Educación Superior de gestión estatal o gestión privada</li>
+                            <li style="margin-bottom: 10px;">Título oficial de Universidad o Instituto de Educación Superior provenientes de un país extranjero con convenio de reciprocidad</li>
+                        </ul>
+                        <p style="background: var(--light-gray); padding: 15px; border-radius: 5px; margin-top: 20px;">
+                            <strong>Más información:</strong> Consultá la <a href="assets/docs/Ley-No14799-Colegio-Prof-Turismo-1.pdf" target="_blank" style="color: var(--primary);">Ley Provincial N° 14799</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card" style="border-left: 4px solid var(--accent);">
+                    <div class="card-content">
+                        <h2 style="color: var(--accent); margin-bottom: 20px;">Inscripción Transitoria</h2>
+                        <p style="margin-bottom: 15px; line-height: 1.8;">
+                            El último artículo de la ley, establecía de manera transitoria lo siguiente: «Dentro del término de noventa (90) días computados a partir de la publicación de la ley (recalculado desde Resolución 005/16), por única vez y con carácter de excepción, podrán matricularse en el Colegio sin necesidad de cumplimentar los requisitos del artículo 8°, quienes acrediten haberse desempeñado en la actividad durante cinco (5) años como mínimo en el territorio de la Provincia, residan en la misma por el mismo lapso de tiempo y cumplimenten los demás requisitos exigidos por la ley. A los fines de la acreditación de la referida actividad, se deberá presentar prueba documental o informativa emanada de organismos públicos.»
+                        </p>
+                        <p style="font-weight: 600; color: #991b1b;">
+                            Dicho plazo, recalculado (Resolución 5) y prorrogado (Resolución 9 y 14), ha <strong>VENCIDO el 31 de MARZO del 2017</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="/contacto.html" class="btn btn-primary">Contactanos para más información</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Colegio de Profesionales en Turismo</h3>
+                    <p>Entidad reguladora del ejercicio profesional del turismo en la Provincia de Buenos Aires.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <a href="/el-colegio.html">El Colegio</a>
+                    <a href="/noticias.html">Noticias</a>
+                    <a href="/comision.html">Comisión Directiva</a>
+                    <a href="/matriculados.html">Matriculados</a>
+                    <a href="/contacto.html">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p>Email: info@colegioturismo.org.ar</p>
+                    <p>Teléfono: +54 11 4567-8900</p>
+                    <p>Dirección: Av. Corrientes 1234, CABA</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

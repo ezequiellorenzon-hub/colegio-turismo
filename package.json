@@ -1,0 +1,13 @@
+{
+  "name": "colegio-turismo",
+  "version": "1.0.0",
+  "description": "Sitio web para Colegio de Profesionales en Turismo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["turismo", "colegio", "profesionales"],
+  "dependencies": {
+    "better-sqlite3": "^11.5.0"
+  }
+}

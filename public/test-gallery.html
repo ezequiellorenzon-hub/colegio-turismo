@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Galería</title>
+</head>
+<body>
+    <h1>Test de API</h1>
+    <div id="result"></div>
+    <script>
+        async function test() {
+            const result = document.getElementById('result');
+            try {
+                result.innerHTML = 'Probando conexión a /api/news/featured...<br>';
+                const response = await fetch('/api/news/featured');
+                result.innerHTML += 'Status: ' + response.status + '<br>';
+                const data = await response.json();
+                result.innerHTML += 'Datos: ' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.innerHTML += 'Error: ' + error.message;
+            }
+        }
+        test();
+    </script>
+</body>
+</html>

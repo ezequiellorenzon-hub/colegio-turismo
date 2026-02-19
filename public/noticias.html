@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias - Colegio de Turismo</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand"><img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo"></a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="/" class="active">Inicio</a></li>
+                <li><a href="/el-colegio.html">El Colegio</a></li>
+                <li><a href="/noticias.html">Noticias</a></li>
+                <li><a href="/comision.html">Comisión Directiva</a></li>
+                <li><a href="/matriculacion.html">Matriculación</a></li>
+                <li><a href="/matriculados.html">Matriculados</a></li>
+                <li><a href="/contacto.html">Contacto</a></li>
+                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">Noticias y Comunicados</h1>
+            <p class="section-subtitle">Mantente al día con las novedades del colegio</p>
+            
+            <div id="news-container" class="cards-grid">
+                <div class="loading">Cargando noticias</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2026 Colegio de Profesionales en Turismo</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        async function loadNews() {
+            try {
+                const response = await fetch('/api/news');
+                const news = await response.json();
+                
+                const container = document.getElementById('news-container');
+                
+                if (news.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--gray);">No hay noticias</p>';
+                    return;
+                }
+                
+                container.innerHTML = news.map(item => `
+                    <a href="/noticia.html?id=${item.id}" class="card fade-in" style="text-decoration: none; color: inherit; display: block; transition: transform 0.3s;">
+                        ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="card-image">` : '<div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
+                        <div class="card-content">
+                            <h3 class="card-title">${item.title}</h3>
+                            <p class="card-text">${item.excerpt || item.content.substring(0, 200)}...</p>
+                            <div class="card-meta">
+                                <span>👤 ${item.author}</span>
+                                <span>📅 ${new Date(item.created_at).toLocaleDateString('es-ES')}</span>
+                            </div>
+                            <button class="btn btn-primary" style="margin-top: 15px;">Leer más →</button>
+                        </div>
+                    </a>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        loadNews();
+    </script>
+</body>
+</html>

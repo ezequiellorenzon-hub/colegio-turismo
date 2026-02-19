@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Noticia - Colegio de Turismo</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .article-header {
+            margin-bottom: 30px;
+        }
+        .article-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .article-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--gray);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+        .article-content p {
+            margin-bottom: 20px;
+        }
+        .back-button {
+            margin-bottom: 30px;
+        }
+        .featured-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
+            </a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="/" class="active">Inicio</a></li>
+                <li><a href="/el-colegio.html">El Colegio</a></li>
+                <li><a href="/noticias.html">Noticias</a></li>
+                <li><a href="/comision.html">Comisión Directiva</a></li>
+                <li><a href="/matriculacion.html">Matriculación</a></li>
+                <li><a href="/matriculados.html">Matriculados</a></li>
+                <li><a href="/contacto.html">Contacto</a></li>
+                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="back-button">
+                <a href="/noticias.html" class="btn btn-secondary">← Volver a Noticias</a>
+            </div>
+
+            <div id="article-container" style="max-width: 900px; margin: 0 auto;">
+                <div class="loading" style="text-align: center; padding: 50px;">Cargando noticia...</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Colegio de Profesionales en Turismo</h3>
+                    <p>Entidad reguladora del ejercicio profesional del turismo en la Provincia de Buenos Aires.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <a href="/el-colegio.html">El Colegio</a>
+                    <a href="/noticias.html">Noticias</a>
+                    <a href="/comision.html">Comisión Directiva</a>
+                    <a href="/matriculados.html">Matriculados</a>
+                    <a href="/matriculacion.html">Matriculación</a>
+                    <a href="/contacto.html">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p>Email: info@colegioturismo.org.ar</p>
+                    <p>Teléfono: +54 11 4567-8900</p>
+                    <p>Dirección: Av. Corrientes 1234, CABA</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        async function loadArticle() {
+            try {
+                // Obtener ID de la URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get('id');
+                
+                if (!id) {
+                    window.location.href = '/noticias.html';
+                    return;
+                }
+                
+                // Cargar noticia
+                const response = await fetch(`/api/news/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error('Noticia no encontrada');
+                }
+                
+                const article = await response.json();
+                
+                // Actualizar título de la página
+                document.getElementById('page-title').textContent = `${article.title} - Colegio de Turismo`;
+                
+                // Renderizar artículo
+                const container = document.getElementById('article-container');
+                container.innerHTML = `
+                    <article>
+                        <div class="article-header">
+                            ${article.featured ? '<span class="featured-badge">⭐ Noticia Destacada</span>' : ''}
+                            <h1 style="margin-bottom: 15px; font-size: 2.5rem; line-height: 1.2;">${escapeHtml(article.title)}</h1>
+                            <div class="article-meta">
+                                <span>👤 ${escapeHtml(article.author)}</span>
+                                <span>📅 ${formatDate(article.created_at)}</span>
+                                ${article.updated_at !== article.created_at ? 
+                                    `<span>✏️ Actualizado: ${formatDate(article.updated_at)}</span>` : ''}
+                            </div>
+                        </div>
+                        
+                        ${article.image_url ? 
+                            `<img src="${article.image_url}" alt="${escapeHtml(article.title)}" class="article-image">` : ''}
+                        
+                        ${article.excerpt ? 
+                            `<div style="background: var(--light-gray); padding: 20px; border-left: 4px solid var(--primary); margin-bottom: 30px; border-radius: 5px;">
+                                <strong style="font-size: 1.2rem;">${escapeHtml(article.excerpt)}</strong>
+                            </div>` : ''}
+                        
+                        <div class="article-content">
+                            ${formatContent(article.content)}
+                        </div>
+                        
+                        <div style="margin-top: 50px; padding-top: 30px; border-top: 2px solid var(--light-gray); text-align: center;">
+                            <a href="/noticias.html" class="btn btn-primary">← Volver a todas las noticias</a>
+                        </div>
+                    </article>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('article-container').innerHTML = `
+                    <div style="text-align: center; padding: 50px;">
+                        <h2 style="color: #991b1b;">⚠️ Noticia no encontrada</h2>
+                        <p style="margin: 20px 0;">Lo sentimos, no pudimos encontrar esta noticia.</p>
+                        <a href="/noticias.html" class="btn btn-primary">Ver todas las noticias</a>
+                    </div>
+                `;
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatContent(content) {
+            if (!content) return '';
+            
+            // Convertir saltos de línea a párrafos
+            const paragraphs = content.split('\n\n').filter(p => p.trim());
+            
+            return paragraphs.map(p => {
+                // Si el párrafo empieza con un guion o asterisco, convertirlo en lista
+                if (p.trim().startsWith('- ') || p.trim().startsWith('* ')) {
+                    const items = p.split('\n').filter(item => item.trim());
+                    return '<ul style="margin: 20px 0; margin-left: 30px;">' + 
+                           items.map(item => `<li style="margin-bottom: 10px;">${escapeHtml(item.replace(/^[-*]\s*/, ''))}</li>`).join('') + 
+                           '</ul>';
+                }
+                // Párrafo normal
+                return `<p>${escapeHtml(p)}</p>`;
+            }).join('');
+        }
+
+        loadArticle();
+    </script>
+</body>
+</html>

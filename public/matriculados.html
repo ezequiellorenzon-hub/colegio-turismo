@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profesionales Matriculados</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--light-gray);
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
+            </a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="/" class="active">Inicio</a></li>
+                <li><a href="/el-colegio.html">El Colegio</a></li>
+                <li><a href="/noticias.html">Noticias</a></li>
+                <li><a href="/comision.html">Comisión Directiva</a></li>
+                <li><a href="/matriculacion.html">Matriculación</a></li>
+                <li><a href="/matriculados.html">Matriculados</a></li>
+                <li><a href="/contacto.html">Contacto</a></li>
+                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">Profesionales Matriculados</h1>
+            
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('listado')">📋 Listado</button>
+                <button class="tab" onclick="showTab('honorarios')">💰 Honorarios</button>
+            </div>
+
+            <!-- Tab: Listado de Matriculados -->
+            <div id="listado" class="tab-content active">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, apellido o matrícula..." onkeyup="searchMembers()">
+                    <button onclick="searchMembers()">🔍</button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Matrícula</th>
+                                <th>Apellido y Nombre</th>
+                                <th>Especialidad</th>
+                                <th>Ciudad</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-tbody">
+                            <tr><td colspan="5" class="loading">Cargando profesionales...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab: Honorarios -->
+            <div id="honorarios" class="tab-content">
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div class="card">
+                        <div class="card-content">
+                            <h2 style="color: var(--primary); margin-bottom: 20px;">Honorarios / OTIUM</h2>
+                            
+                            <p style="line-height: 1.8; margin-bottom: 20px;">
+                                A propuesta de la Comisión de Honorarios y Costos Profesionales se debatió entre todos y todas las participantes del <strong>Primer Congreso de Profesionales en Turismo</strong> realizado en la localidad de Tandil en el año 2019, la creación de una unidad de medida que rija los honorarios para las distintas tareas y categorías profesionales de nuestro Colegio.
+                            </p>
+
+                            <p style="line-height: 1.8; margin-bottom: 20px;">
+                                Como consecuencia de esto, el Consejo Directivo aprobó la <strong>Resolución N° 39/19</strong> en la cual se crea la unidad de medida <strong>"Otium"</strong> (del latín ocio), el cual tendrá actualizaciones periódicas por parte del mismo Consejo Directivo para adaptarlo a la realidad económica de nuestra provincia y nuestro país.
+                            </p>
+
+                            <p style="line-height: 1.8; margin-bottom: 20px;">
+                                Posteriormente, en la Asamblea Extraordinaria realizada en el mes de octubre del mismo año, se aprobaron los parámetros de Honorarios Profesionales de <strong>Guías</strong>, <strong>Representante Técnico de Agencia de Viaje</strong>, y sobre <strong>Capacitación y Consultoría</strong>.
+                            </p>
+
+                            <p style="line-height: 1.8; margin-bottom: 30px;">
+                                Actualmente el "Otium" tiene dos actualizaciones en el año coincidentes con el periodo previo a las temporadas de invierno y de verano. La última actualización, aprobada en el mes de noviembre del 2025 a través de la <strong>Resolución N° 05/25</strong> establece los valores vigentes para el ejercicio profesional.
+                            </p>
+
+                            <div style="background: var(--light-gray); padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent);">
+                                <h3 style="margin-bottom: 15px; color: var(--primary);">📄 Resolución Vigente</h3>
+                                <a href="/assets/docs/R05-25.-Actualizacion-OTIUM-Noviembre-2025.pdf" download class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 10px;">
+                                    <span>📥</span>
+                                    <span>Descargar Resolución N° 05/25 - Actualización OTIUM Noviembre 2025</span>
+                                </a>
+                            </div>
+
+                            <div style="margin-top: 30px; padding-top: 30px; border-top: 2px solid var(--light-gray);">
+                                <h3 style="margin-bottom: 15px; color: var(--primary);">ℹ️ Información Adicional</h3>
+                                <p style="line-height: 1.8; color: var(--gray);">
+                                    Para consultas sobre honorarios profesionales o para solicitar asesoramiento sobre la aplicación de la unidad "Otium", contactate con la Comisión de Honorarios a través de nuestra sección de <a href="/contacto.html" style="color: var(--accent); text-decoration: underline;">contacto</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Colegio de Profesionales en Turismo</h3>
+                    <p>Entidad reguladora del ejercicio profesional del turismo en la Provincia de Buenos Aires.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <a href="/el-colegio.html">El Colegio</a>
+                    <a href="/noticias.html">Noticias</a>
+                    <a href="/comision.html">Comisión Directiva</a>
+                    <a href="/matriculados.html">Matriculados</a>
+                    <a href="/matriculacion.html">Matriculación</a>
+                    <a href="/contacto.html">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p>Email: info@colegioturismo.org.ar</p>
+                    <p>Teléfono: +54 11 4567-8900</p>
+                    <p>Dirección: Av. Corrientes 1234, CABA</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        let allMembers = [];
+
+        async function loadMembers() {
+            try {
+                const response = await fetch('/api/members');
+                allMembers = await response.json();
+                displayMembers(allMembers);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('members-tbody').innerHTML = 
+                    '<tr><td colspan="5" style="text-align: center; color: red;">Error al cargar los datos</td></tr>';
+            }
+        }
+
+        function displayMembers(members) {
+            const tbody = document.getElementById('members-tbody');
+            
+            if (members.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No se encontraron profesionales</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = members.map(member => `
+                <tr>
+                    <td><strong>${member.matricula}</strong></td>
+                    <td>${member.surname}, ${member.name}</td>
+                    <td>${member.specialty || '-'}</td>
+                    <td>${member.city || '-'}</td>
+                    <td>${member.email ? `<a href="mailto:${member.email}">${member.email}</a>` : '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function searchMembers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!searchTerm) {
+                displayMembers(allMembers);
+                return;
+            }
+            
+            const filtered = allMembers.filter(member => 
+                member.name.toLowerCase().includes(searchTerm) ||
+                member.surname.toLowerCase().includes(searchTerm) ||
+                member.matricula.toLowerCase().includes(searchTerm) ||
+                (member.specialty && member.specialty.toLowerCase().includes(searchTerm)) ||
+                (member.city && member.city.toLowerCase().includes(searchTerm))
+            );
+            
+            displayMembers(filtered);
+        }
+
+        // Cargar al inicio
+        loadMembers();
+    </script>
+</body>
+</html>

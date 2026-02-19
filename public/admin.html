@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        .admin-tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+        .admin-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .admin-content {
+            display: none;
+        }
+        .admin-content.active {
+            display: block;
+        }
+        .admin-table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .admin-table-actions button {
+            padding: 5px 15px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand"><img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo"> <span style="margin-left: 10px;">Admin</span></a>
+            <ul class="navbar-menu"><li><a href="/">← Volver al Sitio</a></li></ul>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <h1 class="section-title">Panel de Administración</h1>
+            
+            <div id="alert" class="alert"></div>
+
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="showTab('news')">📰 Noticias</button>
+                <button class="admin-tab" onclick="showTab('board')">👥 Comisión Directiva</button>
+                <button class="admin-tab" onclick="showTab('members')">📜 Matriculados</button>
+                <button class="admin-tab" onclick="showTab('autoridades')">🏛️ Autoridades</button>
+            </div>
+
+            <!-- NEWS TAB -->
+            <div id="news-tab" class="admin-content active">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2>Crear Nueva Noticia</h2>
+                        <form id="news-form">
+                            <div class="form-group">
+                                <label>Título *</label>
+                                <input type="text" class="form-control" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Resumen</label>
+                                <input type="text" class="form-control" name="excerpt" placeholder="Breve resumen para la tarjeta">
+                            </div>
+                            <div class="form-group">
+                                <label>Contenido *</label>
+                                <textarea class="form-control" name="content" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Autor *</label>
+                                <input type="text" class="form-control" name="author" required>
+                            </div>
+                            <div class="form-group">
+                                <label>URL de Imagen</label>
+                                <input type="url" class="form-control" name="image_url" placeholder="https://...">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" name="featured"> Noticia destacada (aparece en home)
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Publicar Noticia</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <h3 style="padding: 20px;">Noticias Publicadas</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Autor</th>
+                                <th>Fecha</th>
+                                <th>Destacada</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="news-list">
+                            <tr><td colspan="5" class="loading">Cargando</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BOARD TAB -->
+            <div id="board-tab" class="admin-content">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2>Agregar Miembro de Comisión</h2>
+                        <form id="board-form">
+                            <div class="form-group">
+                                <label>Nombre Completo *</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Cargo *</label>
+                                <input type="text" class="form-control" name="position" required placeholder="Ej: Presidente, Secretario, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label>Biografía</label>
+                                <textarea class="form-control" name="bio"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label>Orden de Aparición</label>
+                                <input type="number" class="form-control" name="order_position" value="0">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Agregar Miembro</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <h3 style="padding: 20px;">Comisión Directiva Actual</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Cargo</th>
+                                <th>Email</th>
+                                <th>Orden</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="board-list">
+                            <tr><td colspan="5" class="loading">Cargando</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MEMBERS TAB -->
+            <div id="members-tab" class="admin-content">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2>Registrar Nuevo Profesional</h2>
+                        <form id="members-form">
+                            <div class="form-group">
+                                <label>Matrícula *</label>
+                                <input type="text" class="form-control" name="matricula" required placeholder="TUR-XXX">
+                            </div>
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido *</label>
+                                <input type="text" class="form-control" name="surname" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Especialidad</label>
+                                <input type="text" class="form-control" name="specialty" placeholder="Ej: Guía de Turismo">
+                            </div>
+                            <div class="form-group">
+                                <label>Ciudad</label>
+                                <input type="text" class="form-control" name="city">
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="tel" class="form-control" name="phone">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha de Alta</label>
+                                <input type="date" class="form-control" name="registration_date">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Registrar Profesional</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <h3 style="padding: 20px;">Profesionales Matriculados</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Matrícula</th>
+                                <th>Apellido y Nombre</th>
+                                <th>Especialidad</th>
+                                <th>Ciudad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-list">
+                            <tr><td colspan="5" class="loading">Cargando</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- AUTORIDADES TAB (Unificado) -->
+            <div id="autoridades-tab" class="admin-content">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-content">
+                        <h2>Agregar Autoridad</h2>
+                        <form id="autoridades-form">
+                            <div class="form-group">
+                                <label>Tipo de Autoridad *</label>
+                                <select class="form-control" name="tipo" required onchange="toggleDelegacionField(this.value)">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="consejo_directivo">Consejo Directivo</option>
+                                    <option value="comision_revisora">Comisión Revisora de Cuentas</option>
+                                    <option value="tribunal_etica">Tribunal de Ética</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Cargo *</label>
+                                <input type="text" class="form-control" name="cargo" required placeholder="Ej: Presidente, 1º Titular, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido *</label>
+                                <input type="text" class="form-control" name="apellido" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" class="form-control" name="nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Matrícula *</label>
+                                <input type="text" class="form-control" name="matricula" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Categoría *</label>
+                                <input type="text" class="form-control" name="categoria" required placeholder="Ej: Licenciado/a, Técnico/a, Guía">
+                            </div>
+                            <div class="form-group" id="delegacion-field">
+                                <label>Delegación/Zona</label>
+                                <input type="text" class="form-control" name="delegacion_zona" placeholder="Solo para Consejo y Comisión Revisora">
+                            </div>
+                            <div class="form-group">
+                                <label>Orden</label>
+                                <input type="number" class="form-control" name="orden" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Período</label>
+                                <input type="text" class="form-control" name="periodo" value="2024-2026" placeholder="Ej: 2024-2026">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Agregar Autoridad</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tabs para ver cada tipo -->
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--light-gray);">
+                    <button class="admin-tab active" onclick="showAutoridadTipo('consejo_directivo')">Consejo Directivo</button>
+                    <button class="admin-tab" onclick="showAutoridadTipo('comision_revisora')">Comisión Revisora</button>
+                    <button class="admin-tab" onclick="showAutoridadTipo('tribunal_etica')">Tribunal Ética</button>
+                </div>
+
+                <div id="autoridades-consejo_directivo" class="autoridad-list active">
+                    <div class="table-container">
+                        <h3 style="padding: 20px;">Consejo Directivo</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cargo</th>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>Matrícula</th>
+                                    <th>Categoría</th>
+                                    <th>Delegación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-consejo_directivo">
+                                <tr><td colspan="7" class="loading">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="autoridades-comision_revisora" class="autoridad-list" style="display:none;">
+                    <div class="table-container">
+                        <h3 style="padding: 20px;">Comisión Revisora de Cuentas</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cargo</th>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>Matrícula</th>
+                                    <th>Categoría</th>
+                                    <th>Delegación</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-comision_revisora">
+                                <tr><td colspan="7" class="loading">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="autoridades-tribunal_etica" class="autoridad-list" style="display:none;">
+                    <div class="table-container">
+                        <h3 style="padding: 20px;">Tribunal de Ética Profesional</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cargo</th>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>Matrícula</th>
+                                    <th>Categoría</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-tribunal_etica">
+                                <tr><td colspan="6" class="loading">Cargando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+        // TAB NAVIGATION
+        function showTab(tab) {
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.admin-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+
+        // ALERTS
+        function showAlert(message, type = 'success') {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+        }
+
+        // ==================== NEWS ====================
+        async function loadNews() {
+            const response = await fetch('/api/news');
+            const news = await response.json();
+            document.getElementById('news-list').innerHTML = news.map(n => `
+                <tr>
+                    <td>${n.title}</td>
+                    <td>${n.author}</td>
+                    <td>${new Date(n.created_at).toLocaleDateString()}</td>
+                    <td>${n.featured ? '⭐ Sí' : 'No'}</td>
+                    <td class="admin-table-actions">
+                        <button class="btn btn-danger" onclick="deleteNews(${n.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('news-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                title: formData.get('title'),
+                excerpt: formData.get('excerpt'),
+                content: formData.get('content'),
+                author: formData.get('author'),
+                image_url: formData.get('image_url'),
+                featured: formData.get('featured') ? 1 : 0
+            };
+            
+            await fetch('/api/news', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            showAlert('✅ Noticia publicada correctamente');
+            e.target.reset();
+            loadNews();
+        });
+
+        async function deleteNews(id) {
+            if (!confirm('¿Eliminar esta noticia?')) return;
+            await fetch(`/api/news/${id}`, { method: 'DELETE' });
+            showAlert('✅ Noticia eliminada');
+            loadNews();
+        }
+
+        // ==================== BOARD ====================
+        async function loadBoard() {
+            const response = await fetch('/api/board');
+            const board = await response.json();
+            document.getElementById('board-list').innerHTML = board.map(b => `
+                <tr>
+                    <td>${b.name}</td>
+                    <td>${b.position}</td>
+                    <td>${b.email || '-'}</td>
+                    <td>${b.order_position}</td>
+                    <td class="admin-table-actions">
+                        <button class="btn btn-danger" onclick="deleteBoard(${b.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('board-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                name: formData.get('name'),
+                position: formData.get('position'),
+                bio: formData.get('bio'),
+                email: formData.get('email'),
+                order_position: parseInt(formData.get('order_position'))
+            };
+            
+            await fetch('/api/board', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            showAlert('✅ Miembro agregado correctamente');
+            e.target.reset();
+            loadBoard();
+        });
+
+        async function deleteBoard(id) {
+            if (!confirm('¿Eliminar este miembro?')) return;
+            await fetch(`/api/board/${id}`, { method: 'DELETE' });
+            showAlert('✅ Miembro eliminado');
+            loadBoard();
+        }
+
+        // ==================== MEMBERS ====================
+        async function loadMembers() {
+            const response = await fetch('/api/members');
+            const members = await response.json();
+            document.getElementById('members-list').innerHTML = members.map(m => `
+                <tr>
+                    <td><strong>${m.matricula}</strong></td>
+                    <td>${m.surname}, ${m.name}</td>
+                    <td>${m.specialty || '-'}</td>
+                    <td>${m.city || '-'}</td>
+                    <td class="admin-table-actions">
+                        <button class="btn btn-danger" onclick="deleteMember(${m.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('members-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                matricula: formData.get('matricula'),
+                name: formData.get('name'),
+                surname: formData.get('surname'),
+                specialty: formData.get('specialty'),
+                city: formData.get('city'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                registration_date: formData.get('registration_date')
+            };
+            
+            await fetch('/api/members', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            showAlert('✅ Profesional registrado correctamente');
+            e.target.reset();
+            loadMembers();
+        });
+
+        async function deleteMember(id) {
+            if (!confirm('¿Eliminar este profesional?')) return;
+            await fetch(`/api/members/${id}`, { method: 'DELETE' });
+            showAlert('✅ Profesional eliminado');
+            loadMembers();
+        }
+
+        // ==================== AUTORIDADES (Unificado) ====================
+        
+        function toggleDelegacionField(tipo) {
+            const field = document.getElementById('delegacion-field');
+            if (tipo === 'tribunal_etica') {
+                field.style.display = 'none';
+            } else {
+                field.style.display = 'block';
+            }
+        }
+
+        function showAutoridadTipo(tipo) {
+            document.querySelectorAll('.autoridad-list').forEach(l => l.style.display = 'none');
+            document.getElementById(`autoridades-${tipo}`).style.display = 'block';
+        }
+
+        async function loadAutoridades(tipo) {
+            const response = await fetch(`/api/autoridades/${tipo.replace('_', '-')}`);
+            const data = await response.json();
+            
+            const tbody = document.getElementById(`list-${tipo}`);
+            if (tipo === 'tribunal_etica') {
+                tbody.innerHTML = data.map(m => `
+                    <tr>
+                        <td>${m.cargo}</td>
+                        <td>${m.apellido}</td>
+                        <td>${m.nombre}</td>
+                        <td>${m.matricula}</td>
+                        <td>${m.categoria}</td>
+                        <td class="admin-table-actions">
+                            <button class="btn btn-danger" onclick="deleteAutoridad(${m.id}, '${tipo}')">Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } else {
+                tbody.innerHTML = data.map(m => `
+                    <tr>
+                        <td>${m.cargo}</td>
+                        <td>${m.apellido}</td>
+                        <td>${m.nombre}</td>
+                        <td>${m.matricula}</td>
+                        <td>${m.categoria}</td>
+                        <td>${m.delegacion_zona || '-'}</td>
+                        <td class="admin-table-actions">
+                            <button class="btn btn-danger" onclick="deleteAutoridad(${m.id}, '${tipo}')">Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        document.getElementById('autoridades-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                tipo: formData.get('tipo'),
+                cargo: formData.get('cargo'),
+                apellido: formData.get('apellido'),
+                nombre: formData.get('nombre'),
+                matricula: formData.get('matricula'),
+                categoria: formData.get('categoria'),
+                delegacion_zona: formData.get('delegacion_zona') || null,
+                orden: parseInt(formData.get('orden')),
+                periodo: formData.get('periodo')
+            };
+            
+            await fetch('/api/autoridades', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            showAlert('✅ Autoridad agregada correctamente');
+            e.target.reset();
+            loadAutoridades(data.tipo);
+        });
+
+        async function deleteAutoridad(id, tipo) {
+            if (!confirm('¿Eliminar esta autoridad?')) return;
+            await fetch(`/api/autoridades/${id}`, { method: 'DELETE' });
+            showAlert('✅ Autoridad eliminada');
+            loadAutoridades(tipo);
+        }
+
+        // LOAD ALL
+        loadNews();
+        loadBoard();
+        loadMembers();
+        loadAutoridades('consejo_directivo');
+        loadAutoridades('comision_revisora');
+        loadAutoridades('tribunal_etica');
+    </script>
+</body>
+</html>
