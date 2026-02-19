@@ -1,49 +1,48 @@
 /* ========================================
-   VARIABLES Y RESET
+   VARIABLES Y RESET (FUSIONADO)
    ======================================== */
 
 :root {
-  /* Colores principales */
-  --primary: #2563eb;
-  --primary-dark: #1e40af;
+  /* Paleta Premium 2026 */
+  --primary: #4f46e5;
+  --primary-dark: #3730a3;
   --secondary: #10b981;
-  --accent: #f59e0b;
+  --accent: #fbbf24;
   
-  /* Grises */
-  --dark: #1f2937;
-  --gray: #6b7280;
-  --light-gray: #f3f4f6;
+  --dark: #0f172a;
+  --gray: #64748b;
+  --light-gray: #f8fafc;
   --white: #ffffff;
   
-  /* Tipografía */
-  --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Sombras */
+  /* Sombras modernas (Layers) */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   
-  /* Transiciones */
-  --transition: all 0.3s ease;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
   font-family: var(--font-primary);
   line-height: 1.6;
   color: var(--dark);
-  background: var(--white);
+  background: var(--light-gray); /* Cambiado a gris muy suave para resaltar componentes */
 }
 
 img {
   max-width: 100%;
   height: auto;
   display: block;
+  border-radius: 8px;
 }
 
 a {
@@ -59,49 +58,54 @@ a {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .section {
-  padding: 80px 0;
+  padding: 100px 0; /* Más aire entre secciones */
 }
 
 .section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 2.8rem;
+  font-weight: 800;
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   color: var(--dark);
+  letter-spacing: -0.03em;
 }
 
 .section-subtitle {
   text-align: center;
   color: var(--gray);
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin: -30px auto 50px;
+  font-size: 1.15rem;
+  max-width: 650px;
+  margin: -25px auto 60px;
 }
 
 .btn {
-  display: inline-block;
-  padding: 12px 30px;
-  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  border-radius: 50px; /* Estilo píldora moderna */
   font-weight: 600;
   cursor: pointer;
   border: none;
   transition: var(--transition);
   font-size: 1rem;
+  gap: 8px;
 }
 
 .btn-primary {
   background: var(--primary);
   color: white;
+  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
 }
 
 .btn-primary:hover {
   background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
 }
 
 .btn-secondary {
@@ -116,16 +120,18 @@ a {
 }
 
 /* ========================================
-   NAVBAR
+   NAVBAR (GLASSMORPHISM)
    ======================================== */
 
 .navbar {
-  background: #0f172a;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 1000;
-  padding: 15px 0;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .navbar .container {
@@ -135,47 +141,32 @@ a {
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.04em;
 }
 
-.navbar-logo {
-  height: 50px;
-  width: auto;
-  object-fit: contain;
+.navbar-brand span {
+  color: var(--primary);
 }
 
 .navbar-menu {
   display: flex;
   list-style: none;
-  gap: 30px;
+  gap: 35px;
   align-items: center;
 }
 
 .navbar-menu a {
-  color: white;
+  color: rgba(255, 255, 255, 0.75);
   font-weight: 500;
-  padding: 5px 0;
-  border-bottom: 2px solid transparent;
+  font-size: 0.95rem;
 }
 
 .navbar-menu a:hover,
 .navbar-menu a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-.navbar-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: white;
+  color: var(--white);
 }
 
 /* ========================================
@@ -183,122 +174,72 @@ a {
    ======================================== */
 
 .hero {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: radial-gradient(circle at top right, #1e293b, #0f172a);
   color: white;
-  padding: 120px 0;
+  padding: 160px 0;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.hero .container {
-  position: relative;
-  z-index: 1;
-}
-
 .hero h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  animation: fadeInUp 0.8s ease;
+  font-size: 4rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  margin-bottom: 25px;
+  line-height: 1.1;
 }
 
 .hero p {
-  font-size: 1.3rem;
-  margin-bottom: 30px;
-  opacity: 0.9;
-  animation: fadeInUp 0.8s ease 0.2s backwards;
-}
-
-.hero .btn {
-  animation: fadeInUp 0.8s ease 0.4s backwards;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  font-size: 1.35rem;
+  color: #94a3b8;
+  max-width: 750px;
+  margin: 0 auto 45px;
 }
 
 /* ========================================
-   CARDS
+   CARDS (DISEÑO CLEAN)
    ======================================== */
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 35px;
 }
 
 .card {
   background: white;
-  border-radius: 10px;
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  transition: var(--transition);
+  border: 1px solid rgba(0,0,0,0.03);
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px);
   box-shadow: var(--shadow-lg);
 }
 
-.card-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  background: var(--light-gray);
-}
-
 .card-content {
-  padding: 25px;
+  padding: 30px;
 }
 
 .card-title {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: var(--dark);
-}
-
-.card-text {
-  color: var(--gray);
-  margin-bottom: 15px;
-}
-
-.card-meta {
-  display: flex;
-  gap: 15px;
-  color: var(--gray);
-  font-size: 0.9rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 12px;
 }
 
 /* ========================================
-   TABLE
+   TABLAS (ESTILO MODERNO)
    ======================================== */
 
 .table-container {
   background: white;
-  border-radius: 10px;
-  overflow: hidden;
+  border-radius: 16px;
   box-shadow: var(--shadow-md);
+  border: 1px solid #eef2f6;
+  overflow: hidden;
 }
 
 table {
@@ -307,22 +248,61 @@ table {
 }
 
 thead {
-  background: var(--primary);
-  color: white;
+  background: #f8fafc;
+  color: var(--gray);
 }
 
-th, td {
-  padding: 15px;
-  text-align: left;
+th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 20px;
 }
 
-tbody tr {
-  border-bottom: 1px solid var(--light-gray);
+td {
+  padding: 18px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* ========================================
+   FORMULARIOS Y BUSCADOR
+   ======================================== */
+
+.search-bar {
+  max-width: 600px;
+  margin: 0 auto 50px;
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 18px 25px;
+  border: 2px solid #e2e8f0;
+  border-radius: 100px;
+  font-size: 1rem;
   transition: var(--transition);
 }
 
-tbody tr:hover {
-  background: var(--light-gray);
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+.form-control {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  background: white;
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
 }
 
 /* ========================================
@@ -330,126 +310,17 @@ tbody tr:hover {
    ======================================== */
 
 .footer {
-  background: #0f172a;
+  background: #020617;
   color: white;
-  padding: 60px 0 30px;
-  margin-top: 80px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 40px;
-  margin-bottom: 40px;
-}
-
-.footer-section h3 {
-  margin-bottom: 20px;
-  color: white;
-  font-weight: 600;
-}
-
-.footer-section p,
-.footer-section a {
-  color: rgba(255, 255, 255, 0.8);
-  display: block;
-  margin-bottom: 10px;
-}
-
-.footer-section a:hover {
-  color: var(--accent);
+  padding: 100px 0 40px;
 }
 
 .footer-bottom {
   text-align: center;
-  padding-top: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* ========================================
-   FORMS
-   ======================================== */
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--dark);
-}
-
-.form-control {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid var(--light-gray);
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: var(--transition);
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-textarea.form-control {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.alert {
-  padding: 15px 20px;
-  border-radius: 6px;
-  margin-bottom: 20px;
-  display: none;
-}
-
-.alert-success {
-  background: #d1fae5;
-  color: #065f46;
-  border: 1px solid var(--secondary);
-}
-
-.alert-error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #ef4444;
-}
-
-/* ========================================
-   SEARCH BAR
-   ======================================== */
-
-.search-bar {
-  max-width: 600px;
-  margin: 0 auto 40px;
-  position: relative;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 15px 50px 15px 20px;
-  border: 2px solid var(--light-gray);
-  border-radius: 50px;
-  font-size: 1.1rem;
-}
-
-.search-bar button {
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 50px;
-  cursor: pointer;
+  padding-top: 40px;
+  margin-top: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: #475569;
 }
 
 /* ========================================
@@ -457,78 +328,10 @@ textarea.form-control {
    ======================================== */
 
 @media (max-width: 768px) {
+  .hero h1 { font-size: 2.5rem; }
+  .section-title { font-size: 2.2rem; }
   .navbar-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #0f172a;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
   }
-  
-  .navbar-menu.active {
-    display: flex;
-  }
-  
-  .navbar-toggle {
-    display: block;
-    color: white;
-  }
-  
-  .hero h1 {
-    font-size: 2rem;
-  }
-  
-  .hero p {
-    font-size: 1.1rem;
-  }
-  
-  .section-title {
-    font-size: 2rem;
-  }
-  
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .table-container {
-    overflow-x: auto;
-  }
-}
-
-/* ========================================
-   ANIMACIONES
-   ======================================== */
-
-.fade-in {
-  animation: fadeIn 0.6s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: var(--gray);
-}
-
-.loading::after {
-  content: '...';
-  animation: dots 1.5s infinite;
-}
-
-@keyframes dots {
-  0%, 20% { content: '.'; }
-  40% { content: '..'; }
-  60%, 100% { content: '...'; }
 }
