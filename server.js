@@ -85,23 +85,39 @@ expressApp.delete('/api/autoridades/:id', (req, res) => {
 // --- SETTINGS ---
 expressApp.get('/api/settings', (req, res) => res.json(queries.getAllSettings.all()));
 
-// --- NODEMAILER (Opcional, pero no rompe nada) ---
+// --- NODEMAILER (Configuración Robusta) ---
 expressApp.post('/enviar-contacto', async (req, res) => {
     const { nombre, apellido, email, asunto, mensaje } = req.body;
+
     const transporter = nodemailer.createTransport({
         service: 'gmail',
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: { 
+            user: process.env.EMAIL_USER, 
+            pass: process.env.EMAIL_PASS 
+        },
+        tls: {
+            // Esto es clave para que Render no rebote por certificados
+            rejectUnauthorized: false
+        }
     });
+
     try {
         await transporter.sendMail({
-            from: process.env.EMAIL_USER,
+            from: `"${nombre} ${apellido}" <${process.env.EMAIL_USER}>`,
             to: process.env.EMAIL_USER,
-            subject: `Consulta: ${asunto}`,
+            subject: `Consulta Web: ${asunto}`,
             text: `De: ${nombre} ${apellido} (${email})\n\nMensaje: ${mensaje}`
         });
+        
+        console.log("✅ Mail enviado con éxito");
         res.json({ success: true });
     } catch (e) {
-        res.status(500).json({ success: false });
+        // Logueamos el error para que lo veas en Render
+        console.error("❌ Error en Nodemailer:", e.message);
+        res.status(500).json({ success: false, message: e.message });
     }
 });
 
@@ -118,6 +134,19 @@ expressApp.get('/:page', (req, res, next) => {
         res.sendFile(filePath);
     } else {
         next();
+    }
+});
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // true para puerto 465
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false // Esto ayuda a evitar problemas de certificados en Render
     }
 });
 
