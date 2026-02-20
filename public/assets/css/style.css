@@ -340,11 +340,37 @@ td {
    RESPONSIVE
    ======================================== */
 
-@media (max-width: 768px) {
-  .hero h1 { font-size: 2.5rem; }
-  .section-title { font-size: 2.2rem; }
+@media (max-width: 992px) { /* Subimos a 992px porque tienes muchos links */
+  .navbar-toggle {
+    display: block; /* Aparece el botón de menú */
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    order: 2;
+  }
+
   .navbar-menu {
-    background: rgba(15, 23, 42, 0.98);
-    backdrop-filter: blur(20px);
+    display: none; /* Escondemos los links por defecto */
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #0f172a;
+    padding: 20px;
+    gap: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Esta clase la activaremos con JavaScript */
+  .navbar-menu.active {
+    display: flex !important; 
+  }
+
+  .navbar-brand {
+    order: 1;
   }
 }
