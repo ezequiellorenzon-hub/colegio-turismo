@@ -35,7 +35,7 @@
             <div style="max-width: 700px; margin: 0 auto;">
                 <div class="card">
                     <div class="card-content">
-                        <form action="/enviar-contacto" method="POST" style="display: grid; gap: 20px;">
+                        <form id="contactoForm" style="display: grid; gap: 20px;">
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                                 <div>
@@ -74,8 +74,10 @@
                                 <textarea name="mensaje" class="form-control" rows="6" placeholder="Inserte aquí su mensaje" required style="resize: vertical;"></textarea>
                             </div>
 
+                            <div id="mensaje-estado" style="display: none; padding: 15px; border-radius: 8px; font-weight: 500; text-align: center; border: 1px solid transparent;"></div>
+
                             <div style="text-align: left;">
-                                <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                                <button type="submit" class="btn btn-primary" id="btnEnviar">Enviar mensaje</button>
                             </div>
                         </form>
                     </div>
@@ -84,20 +86,35 @@
         </div>
     </section>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA">
+                </div>
+                <div class="footer-info">
+                    <p>&copy; 2026 Colegio de Profesionales en Turismo de la Pcia. de Bs. As.</p>
+                    <p>Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        // Función para el menú responsive
         function toggleMenu() {
             document.getElementById('navMenu').classList.toggle('active');
         }
-        const formulario = document.querySelector('form');
+
+        const formulario = document.getElementById('contactoForm');
         const mensajeEstado = document.getElementById('mensaje-estado');
+        const btnEnviar = document.getElementById('btnEnviar');
 
         formulario.addEventListener('submit', async (e) => {
-            e.preventDefault(); // <--- ESTO evita el error 404
+            e.preventDefault(); 
             
-            const btn = formulario.querySelector('button');
-            btn.innerText = 'Enviando...';
-            btn.disabled = true;
+            btnEnviar.innerText = 'Enviando...';
+            btnEnviar.disabled = true;
+            mensajeEstado.style.display = 'none';
 
             const formData = new FormData(formulario);
             const data = Object.fromEntries(formData.entries());
@@ -109,23 +126,28 @@
                     body: JSON.stringify(data)
                 });
 
-                if (response.ok) {
+                const result = await response.json();
+
+                if (response.ok && result.success) {
                     mensajeEstado.style.display = 'block';
                     mensajeEstado.style.backgroundColor = '#dcfce7'; 
                     mensajeEstado.style.color = '#166534';
+                    mensajeEstado.style.borderColor = '#bbf7d0';
                     mensajeEstado.innerText = '✅ ¡Gracias! Tu mensaje ha sido enviado correctamente.';
                     formulario.reset(); 
                 } else {
-                    throw new Error();
+                    throw new Error(result.message || 'Error en el servidor');
                 }
             } catch (error) {
                 mensajeEstado.style.display = 'block';
                 mensajeEstado.style.backgroundColor = '#fee2e2';
                 mensajeEstado.style.color = '#991b1b';
-                mensajeEstado.innerText = '❌ Error al enviar. Revisa la consola (F12).';
+                mensajeEstado.style.borderColor = '#fecaca';
+                mensajeEstado.innerText = '❌ Error al enviar. Por favor intente más tarde.';
+                console.error(error);
             } finally {
-                btn.innerText = 'Enviar mensaje';
-                btn.disabled = false;
+                btnEnviar.innerText = 'Enviar mensaje';
+                btnEnviar.disabled = false;
             }
         });
     </script>

@@ -153,7 +153,6 @@
                 <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
             </a>
             <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
-            <button class="navbar-toggle" type="button">☰</button>
             <ul class="navbar-menu" id="navMenu">
                 <li><a href="/" class="active">Inicio</a></li>
                 <li><a href="/el-colegio.html">El Colegio</a></li>
@@ -352,7 +351,10 @@
                         <div class="container">
                             <h1>${escapeHtml(news.title)}</h1>
                             <p>${escapeHtml(news.excerpt || news.content?.substring(0, 150) || '')}${news.excerpt || news.content ? '...' : ''}</p>
-                            ${news.id ? `<a href="/noticias.html" class="btn btn-primary" style="background: var(--accent); border: none;">Leer Más</a>` : `<a href="/matriculados.html" class="btn btn-secondary">Ver Profesionales</a>`}
+                            ${news.id 
+                              ? `<a href="/noticia.html?id=${news.id}" class="btn btn-primary" style="background: var(--accent); border: none;">Leer Más</a>` 
+                              : `<a href="/matriculados.html" class="btn btn-secondary">Ver Profesionales</a>`
+                            }
                         </div>
                     </div>
                 </div>
