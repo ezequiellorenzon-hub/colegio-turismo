@@ -3,11 +3,21 @@ const fs = require('fs');
 const path = require('path');
 const Database = require('better-sqlite3');
 const querystring = require('querystring');
+const express = require('express');
+const expressApp = express(); // Aquí creamos la app de Express
+
+// 1. APLICAR MIDDLEWARES AQUÍ (Sobre el objeto express)
+expressApp.use(express.json());
+expressApp.use(express.urlencoded({ extended: true }));
+
+
+
 
 // Configuración
 //const PORT = 3000;
 
 const PORT = process.env.PORT || 3000;
+const nodemailer = require('nodemailer');
 
 //app.listen(PORT, () => {
 //    console.log(`Servidor corriendo en el puerto ${PORT}`);
@@ -288,7 +298,76 @@ const server = http.createServer((req, res) => {
     res.end();
     return;
   }
+//=============================CONFIGURACION MAIL===========================================
+expressApp.use(express.json());
+expressApp.use(express.urlencoded({ extended: true }));
 
+// Ruta para procesar el formulario de contacto
+expressApp.post('/enviar-contacto', async (req, res) => {
+    // Extraemos los datos del cuerpo de la petición (deben coincidir con el 'name' en el HTML)
+    const { nombre, apellido, email, consulta, asunto, mensaje } = req.body;
+
+    // 1. Configuración del Transportador
+    // TIP: Para producción en Render, usa variables de entorno: process.env.EMAIL_USER
+
+    const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        // Node buscará estos nombres en la configuración de Render
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS  
+      }
+    });
+
+    // 2. Diseño del Mail (HTML)
+    const mailOptions = {
+        from: `"${nombre} ${apellido}" <tu-correo@gmail.com>`,
+        to: 'tu-correo@gmail.com', // El mail donde recibirás las consultas
+        subject: `Consulta Web: ${asunto}`,
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <div style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 30px; text-align: center;">
+                    <h1 style="margin: 0; font-size: 24px;">Nueva Consulta Recibida</h1>
+                </div>
+                <div style="padding: 30px; background-color: #ffffff;">
+                    <p style="color: #64748b; font-size: 14px; margin-top: 0;">Detalles del remitente:</p>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 8px 0; color: #1e293b; font-weight: bold; width: 30%;">Nombre:</td>
+                            <td style="padding: 8px 0; color: #475569;">${nombre} ${apellido}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; color: #1e293b; font-weight: bold;">Email:</td>
+                            <td style="padding: 8px 0; color: #475569;">${email}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px 0; color: #1e293b; font-weight: bold;">Consulta:</td>
+                            <td style="padding: 8px 0; color: #475569;">${consulta}</td>
+                        </tr>
+                    </table>
+                    <hr style="border: 0; border-top: 1px solid #f1f5f9; margin: 25px 0;">
+                    <p style="color: #1e293b; font-weight: bold;">Mensaje:</p>
+                    <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; color: #334155; line-height: 1.6; border: 1px solid #edf2f7;">
+                        ${mensaje}
+                    </div>
+                </div>
+                <div style="background-color: #f1f5f9; padding: 20px; text-align: center; color: #94a3b8; font-size: 12px;">
+                    Este es un mensaje automático generado desde el formulario de contacto del Colegio.
+                </div>
+            </div>
+        `
+    };
+
+    // 3. Envío del correo
+    try {
+        await transporter.sendMail(mailOptions);
+        // Redirigir a una página de éxito o enviar un mensaje
+        res.status(200).send('¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.');
+    } catch (error) {
+        console.error('Error en Nodemailer:', error);
+        res.status(500).send('Hubo un error al enviar el correo. Por favor, intente más tarde.');
+    }
+});
   // ==================== API ROUTES ====================
   
   // NEWS

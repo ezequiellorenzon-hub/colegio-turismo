@@ -2,34 +2,93 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Contacto</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Colegio de Profesionales en Turismo</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="/" class="navbar-brand"><img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo"></a>
+            <a href="/" class="navbar-brand">
+                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
+            </a>
+            <button class="navbar-toggle" onclick="toggleMenu()" type="button">☰</button>
+            
             <ul class="navbar-menu" id="navMenu">
-                <li><a href="/" class="active">Inicio</a></li>
+                <li><a href="/">Inicio</a></li>
                 <li><a href="/el-colegio.html">El Colegio</a></li>
                 <li><a href="/noticias.html">Noticias</a></li>
                 <li><a href="/comision.html">Comisión Directiva</a></li>
                 <li><a href="/matriculacion.html">Matriculación</a></li>
                 <li><a href="/matriculados.html">Matriculados</a></li>
-                <li><a href="/contacto.html">Contacto</a></li>
-                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+                <li><a href="/contacto.html" class="active">Contacto</a></li>
+                <li><a href="/admin.html" class="btn-admin">Admin</a></li>
             </ul>
         </div>
     </nav>
 
     <section class="section">
         <div class="container">
-            <h1 class="section-title">Contacto</h1>
-            <div style="max-width: 600px; margin: 0 auto;">
+            <h1 class="section-title">¡Estamos en contacto!</h1>
+            <p class="section-subtitle">Completando este formulario serás dirigido al área correspondiente y en breve serás contactado.</p>
+            
+            <div style="max-width: 700px; margin: 0 auto;">
                 <div class="card">
                     <div class="card-content">
-                        <h3>📞 Información de Contacto</h3>
-                        <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86efe8e0e9c6e5e9eae3e1efe9f2f3f4eff5ebe9a8e9f4e1a8e7f4">[email&
+                        <form action="/enviar-contacto" method="POST" style="display: grid; gap: 20px;">
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div>
+                                    <label style="display:block; margin-bottom:5px; font-weight:600;">Nombre *</label>
+                                    <input type="text" name="nombre" class="form-control" placeholder="Juan Agustín" required>
+                                </div>
+                                <div>
+                                    <label style="display:block; margin-bottom:5px; font-weight:600;">Apellido *</label>
+                                    <input type="text" name="apellido" class="form-control" placeholder="Gomez" required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Correo electrónico *</label>
+                                <input type="email" name="email" class="form-control" placeholder="ej: juan@doe.com" required>
+                            </div>
+
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Seleccione su consulta: *</label>
+                                <select name="consulta" class="form-control" required>
+                                    <option value="" disabled selected>Seleccione una opción...</option>
+                                    <option value="Matriculación">Matriculación</option>
+                                    <option value="Cursos y Capacitación">Cursos y Capacitación</option>
+                                    <option value="Institucional">Institucional</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Asunto *</label>
+                                <input type="text" name="asunto" class="form-control" placeholder="El asunto de su contacto" required>
+                            </div>
+
+                            <div>
+                                <label style="display:block; margin-bottom:5px; font-weight:600;">Su mensaje *</label>
+                                <textarea name="mensaje" class="form-control" rows="6" placeholder="Inserte aquí su mensaje" required style="resize: vertical;"></textarea>
+                            </div>
+
+                            <div style="text-align: left;">
+                                <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Función para el menú responsive
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
