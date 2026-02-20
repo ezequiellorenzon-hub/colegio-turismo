@@ -89,6 +89,45 @@
         function toggleMenu() {
             document.getElementById('navMenu').classList.toggle('active');
         }
+        const formulario = document.querySelector('form');
+        const mensajeEstado = document.getElementById('mensaje-estado');
+
+        formulario.addEventListener('submit', async (e) => {
+            e.preventDefault(); // <--- ESTO evita el error 404
+            
+            const btn = formulario.querySelector('button');
+            btn.innerText = 'Enviando...';
+            btn.disabled = true;
+
+            const formData = new FormData(formulario);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/enviar-contacto', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    mensajeEstado.style.display = 'block';
+                    mensajeEstado.style.backgroundColor = '#dcfce7'; 
+                    mensajeEstado.style.color = '#166534';
+                    mensajeEstado.innerText = '✅ ¡Gracias! Tu mensaje ha sido enviado correctamente.';
+                    formulario.reset(); 
+                } else {
+                    throw new Error();
+                }
+            } catch (error) {
+                mensajeEstado.style.display = 'block';
+                mensajeEstado.style.backgroundColor = '#fee2e2';
+                mensajeEstado.style.color = '#991b1b';
+                mensajeEstado.innerText = '❌ Error al enviar. Revisa la consola (F12).';
+            } finally {
+                btn.innerText = 'Enviar mensaje';
+                btn.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>
