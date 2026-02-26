@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colegio de Profesionales en Turismo</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        /* Hero Gallery Styles - MEJORADO */
+        .hero-gallery {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gallery-container {
+            position: relative;
+            height: 100%;
+        }
+        
+        .gallery-slides {
+            position: relative;
+            height: 100%;
+        }
+        
+        .gallery-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gallery-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+            z-index: 1;
+        }
+        
+        .gallery-slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+        
+        .slide-content {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 3;
+            padding: 40px;
+        }
+        
+        .slide-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            animation: fadeInUp 0.8s ease;
+            line-height: 1.2;
+        }
+        
+        .slide-content p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+        
+        .slide-content .btn {
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+            font-size: 1.1rem;
+            padding: 15px 35px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* Controles de navegación MEJORADOS */
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gallery-nav:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%) scale(1.15);
+            border-color: rgba(255,255,255,0.8);
+        }
+        
+        .gallery-nav.prev {
+            left: 30px;
+        }
+        
+        .gallery-nav.next {
+            right: 30px;
+        }
+        
+        /* Botón de pausa/play */
+        .gallery-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .play-pause-btn {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .play-pause-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+        
+        /* Dots mejorados */
+        .gallery-dots {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: 2px solid rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background: white;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+        
+        .dot:hover {
+            background: rgba(255, 255, 255, 0.7);
+            transform: scale(1.2);
+        }
+        
+        /* Sección de últimas noticias */
+        .latest-news-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .news-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .news-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .news-card-content {
+            padding: 20px;
+        }
+        
+        .news-card-date {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+        
+        .news-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .news-card-excerpt {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .news-card-author {
+            font-size: 0.85rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-gallery {
+                height: 450px;
+            }
+            
+            .slide-content h1 {
+                font-size: 2rem;
+            }
+            
+            .slide-content p {
+                font-size: 1.1rem;
+            }
+            
+            .gallery-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
+            
+            .gallery-nav.prev {
+                left: 15px;
+            }
+            
+            .gallery-nav.next {
+                right: 15px;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
+            </a>
+            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="/" class="active">Inicio</a></li>
+                <li><a href="/el-colegio.html">El Colegio</a></li>
+                <li><a href="/noticias.html">Noticias</a></li>
+                <li><a href="/comision.html">Comisión Directiva</a></li>
+                <li><a href="/matriculados.html">Matriculados</a></li>
+                <li><a href="/matriculacion.html">Matriculación</a></li>
+                <li><a href="/contacto.html">Contacto</a></li>
+                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Gallery con Noticias Destacadas -->
+    <section class="hero-gallery">
+        <div class="gallery-container">
+            <div class="gallery-slides" id="heroGallery">
+                <!-- Los slides se cargan dinámicamente -->
+            </div>
+            
+            <!-- Controles de navegación -->
+            <button class="gallery-nav prev" onclick="changeSlide(-1)" aria-label="Anterior">‹</button>
+            <button class="gallery-nav next" onclick="changeSlide(1)" aria-label="Siguiente">›</button>
+            
+            <!-- Controles inferiores: dots y play/pause -->
+            <div class="gallery-controls">
+                <button class="play-pause-btn" onclick="toggleAutoSlide()" id="playPauseBtn" title="Pausar/Reanudar">
+                    <span id="playPauseIcon">⏸</span>
+                </button>
+                <div class="gallery-dots" id="galleryDots">
+                    <!-- Los dots se generan dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Últimas Noticias -->
+    <section class="latest-news-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Últimas Noticias</h2>
+                <p>Mantente informado con las novedades del colegio</p>
+            </div>
+            
+            <div class="news-grid" id="latestNews">
+                <!-- Las noticias se cargan dinámicamente -->
+                <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
+                    <p style="color: var(--gray);">Cargando noticias...</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="/noticias.html" class="btn btn-primary">Ver todas las noticias →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Colegio de Profesionales en Turismo</h3>
+                    <p>Entidad reguladora del ejercicio profesional del turismo en la Provincia de Buenos Aires.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <a href="/el-colegio.html">El Colegio</a>
+                    <a href="/noticias.html">Noticias</a>
+                    <a href="/comision.html">Comisión Directiva</a>
+                    <a href="/matriculados.html">Matriculados</a>
+                    <a href="/matriculacion.html">Matriculación</a>
+                    <a href="/contacto.html">Contacto</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p>Email: info@colegioturismo.org.ar</p>
+                    <p>Teléfono: +54 11 4567-8900</p>
+                    <p>Dirección: Av. Corrientes 1234, CABA</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        // ==================== HERO GALLERY ====================
+        let currentSlide = 0;
+        let heroNews = [];
+        let autoSlideInterval;
+        let isPaused = false;
+
+        async function loadHeroGallery() {
+            try {
+                const response = await fetch('/api/news/featured');
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                
+                heroNews = await response.json();
+                
+                console.log('✅ Noticias destacadas cargadas:', heroNews.length);
+                
+                if (!heroNews || heroNews.length === 0) {
+                    heroNews = [{
+                        title: 'Colegio de Profesionales en Turismo',
+                        excerpt: 'Promoviendo la excelencia en el turismo argentino',
+                        image_url: ''
+                    }];
+                }
+                
+                displayHeroGallery();
+                startAutoSlide();
+            } catch (error) {
+                console.error('❌ Error al cargar galería:', error);
+                heroNews = [{
+                    title: 'Colegio de Profesionales en Turismo',
+                    excerpt: 'Promoviendo la excelencia en el turismo argentino',
+                    image_url: ''
+                }];
+                displayHeroGallery();
+            }
+        }
+
+        function displayHeroGallery() {
+            const gallery = document.getElementById('heroGallery');
+            const dots = document.getElementById('galleryDots');
+            
+            if (!gallery || !dots) {
+                console.error('❌ Elementos de galería no encontrados');
+                return;
+            }
+            
+            // Generar slides
+            gallery.innerHTML = heroNews.map((news, index) => {
+                const bgStyle = news.image_url 
+                    ? `background-image: url('${news.image_url}');` 
+                    : 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);';
+                
+                return `
+                    <div class="gallery-slide ${index === 0 ? 'active' : ''}" style="${bgStyle}">
+                        <div class="slide-content">
+                            <h1>${escapeHtml(news.title)}</h1>
+                            <p>${escapeHtml(news.excerpt || '')}</p>
+                            ${news.id ? `<a href="/noticia.html?id=${news.id}" class="btn btn-primary">Leer más</a>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Generar dots
+            dots.innerHTML = heroNews.map((_, index) => 
+                `<span class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>`
+            ).join('');
+        }
+
+        function changeSlide(direction) {
+            const slides = document.querySelectorAll('.gallery-slide');
+            const dots = document.querySelectorAll('.dot');
+            
+            if (slides.length === 0) return;
+            
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function goToSlide(index) {
+            const slides = document.querySelectorAll('.gallery-slide');
+            const dots = document.querySelectorAll('.dot');
+            
+            if (slides.length === 0) return;
+            
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            
+            currentSlide = index;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function startAutoSlide() {
+            if (autoSlideInterval) clearInterval(autoSlideInterval);
+            if (!isPaused) {
+                autoSlideInterval = setInterval(() => {
+                    changeSlide(1);
+                }, 5000); // Cambiar cada 5 segundos
+            }
+        }
+
+        function toggleAutoSlide() {
+            isPaused = !isPaused;
+            const icon = document.getElementById('playPauseIcon');
+            const btn = document.getElementById('playPauseBtn');
+            
+            if (isPaused) {
+                clearInterval(autoSlideInterval);
+                icon.textContent = '▶';
+                btn.title = 'Reanudar';
+            } else {
+                startAutoSlide();
+                icon.textContent = '⏸';
+                btn.title = 'Pausar';
+            }
+        }
+
+        // ==================== ÚLTIMAS NOTICIAS ====================
+        async function loadLatestNews() {
+            try {
+                const response = await fetch('/api/news');
+                const allNews = await response.json();
+                
+                // Filtrar solo las NO destacadas y tomar las últimas 6
+                const latestNews = allNews
+                    .filter(news => !news.featured)
+                    .slice(0, 6);
+                
+                console.log('✅ Últimas noticias cargadas:', latestNews.length);
+                
+                const container = document.getElementById('latestNews');
+                
+                if (latestNews.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--gray); grid-column: 1/-1;">No hay noticias disponibles</p>';
+                    return;
+                }
+                
+                container.innerHTML = latestNews.map(news => `
+                    <a href="/noticia.html?id=${news.id}" class="news-card">
+                        ${news.image_url 
+                            ? `<img src="${news.image_url}" alt="${escapeHtml(news.title)}" class="news-card-image">` 
+                            : '<div class="news-card-image"></div>'}
+                        <div class="news-card-content">
+                            <div class="news-card-date">📅 ${formatDate(news.created_at)}</div>
+                            <h3 class="news-card-title">${escapeHtml(news.title)}</h3>
+                            <p class="news-card-excerpt">${escapeHtml(news.excerpt || news.content.substring(0, 120))}...</p>
+                            <div class="news-card-author">👤 ${escapeHtml(news.author)}</div>
+                        </div>
+                    </a>
+                `).join('');
+                
+            } catch (error) {
+                console.error('❌ Error al cargar noticias:', error);
+                document.getElementById('latestNews').innerHTML = 
+                    '<p style="text-align: center; color: red; grid-column: 1/-1;">Error al cargar noticias</p>';
+            }
+        }
+
+        // ==================== UTILIDADES ====================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        // ==================== INICIALIZACIÓN ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeroGallery();
+            loadLatestNews();
+        });
+    </script>
+</body>
+</html>
