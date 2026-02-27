@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delegaciones y Comisiones - CPTBA</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .delegaciones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        .comision-tag {
+            display: inline-block;
+            background: var(--light-gray);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .delegacion-title {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .list-items {
+            list-style: none;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .list-items li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .list-items li::before {
+            content: "•";
+            color: var(--accent);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        .header-banner {
+            background: linear-gradient(rgba(0,51,102,0.8), rgba(0,51,102,0.8)), url('https://cptba.com.ar/wp-content/uploads/2022/07/IMG_20220521_112450-scaled.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    
+    <!--navbar-->
+    <div id="navbar-placeholder"></div>
+
+    <header class="header-banner">
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Delegaciones y Comisiones</h1>
+            <p>Presencia territorial y trabajo técnico en toda la Provincia</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            
+            <div class="card" style="margin-bottom: 50px;">
+                <div class="card-content">
+                    <h2 style="color: var(--primary); margin-bottom: 15px;">Organización Territorial</h2>
+                    <p style="line-height: 1.8;">
+                        El Colegio de Profesionales en Turismo de la Provincia de Buenos Aires se organiza a través de <strong>Delegaciones Regionales</strong> para asegurar que cada matriculado tenga un punto de contacto cercano. Asimismo, las <strong>Comisiones de Trabajo</strong> son los espacios donde desarrollamos la especificidad técnica de nuestra profesión.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="text-align: left;">Delegaciones Regionales</h2>
+            <div class="delegaciones-grid">
+                <div class="info-card">
+                    <h3 class="delegacion-title">Delegación Noreste</h3>
+                    <ul class="list-items">
+                        <li>Sede Central: La Plata</li>
+                        <li>Jurisdicción: AMBA y alrededores</li>
+                        <li>Contacto regional para trámites presenciales</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3 class="delegacion-title">Delegación Sudeste</h3>
+                    <ul class="list-items">
+                        <li>Zona de influencia: Mar del Plata y Costa Atlántica</li>
+                        <li>Atención a profesionales del sector balneario y recreativo</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3 class="delegacion-title">Delegación Noroeste y Sur</h3>
+                    <ul class="list-items">
+                        <li>Centros de atención en polos turísticos emergentes</li>
+                        <li>Coordinación con municipios del interior provincial</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 class="section-title" style="text-align: left; margin-top: 50px;">Comisiones de Trabajo</h2>
+            <div class="delegaciones-grid">
+                <!--<div class="info-card" style="border-top-color: var(--accent);">
+                    <span class="comision-tag">Agencias</span>
+                    <h3 class="delegacion-title">Comisión de Agencias de Viaje e Intermediación</h3>
+                    <p style="font-size: 0.95rem; margin-bottom: 15px;">Análisis normativo y defensa del rol del profesional en la intermediación turística.</p>
+                </div>-->
+                <div class="info-card" onclick="toggleCard(this)" style="border-top-color: var(--accent);">
+                    <span class="toggle-icon">▼</span>
+                    <span class="comision-tag">Agencias</span>
+                    <h3 class="delegacion-title">Comisión de Agencias de Viaje e Intermediación</h3>
+                    <p style="font-size: 0.95rem;">Investigación, actualización normativa y diseño de estándares técnicos para optimizar el ejercicio profesional en la intermediación turística..</p>
+                    
+                    <div class="card-extra-content">
+                        <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 0.9rem;">Objetivos Generales:</h4>
+                        <ul class="list-items" style="font-size: 0.85rem;">
+                            <li>Obtener, analizar y procesar información relativa al ejercicio profesional en el ámbito de las Agencias (Licenciados, Técnicos y Guías).</li>
+                            <li>Analizar proyectos de leyes, reglamentos y resoluciones para colaborar en el posicionamiento del Colegio.</li>
+                            <li>Diseñar instancias de capacitación y actualización para el mejoramiento de la profesión en la intermediación.</li>
+                            <li>Diseñar Normas Técnicas para la figura del Responsable Técnico y otros profesionales en Agencias.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--<div class="info-card" style="border-top-color: var(--accent);">
+                    <span class="comision-tag">Institucional</span>
+                    <h3 class="delegacion-title">Ética y Disciplina</h3>
+                    <p style="font-size: 0.95rem; margin-bottom: 15px;">Vela por el cumplimiento del código de ética y el correcto ejercicio de la profesión.</p>
+                </div>-->
+                <div class="info-card" onclick="toggleCard(this)" style="border-top-color: var(--accent);">
+                    <span class="toggle-icon">▼</span>
+                    <span class="comision-tag">Guias</span>
+                    <h3 class="delegacion-title">Guías de Turismo</h3>
+                    <p style="font-size: 0.95rem;">Fortalecimiento del rol del guía mediante el análisis legal, el diagnóstico territorial y la formación continua.</p>
+                    
+                    <div class="card-extra-content">
+                        <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 0.9rem;">Objetivos Generales:</h4>
+                        <ul class="list-items" style="font-size: 0.85rem;">
+                            <li>Analizar y proponer mejoras en leyes, decretos y ordenanzas que regulan la actividad del guía.</li>
+                            <li>Recabar información estratégica en eventos académicos y asambleas profesionales.</li>
+                            <li>Diagnosticar problemáticas y necesidades específicas de los guías en todo el territorio provincial.</li>
+                            <li>Diseñar programas de capacitación específicos para elevar el estándar del ejercicio profesional.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--<div class="info-card" style="border-top-color: var(--accent);">
+                    <span class="comision-tag">Educación</span>
+                    <h3 class="delegacion-title">Formación Continua</h3>
+                    <p style="font-size: 0.95rem; margin-bottom: 15px;">Organización de seminarios, cursos y convenios con universidades para matriculados.</p>
+                </div>
+            </div>-->
+            <div class="info-card" onclick="toggleCard(this)" style="border-top-color: var(--accent);">
+                <span class="toggle-icon">▼</span>
+                <span class="comision-tag">Educación</span>
+                <h3 class="delegacion-title">Capacitación y Actualización</h3>
+                <p style="font-size: 0.95rem;">Gestión del conocimiento y desarrollo de programas de formación continua para el sector.</p>
+                
+                <div class="card-content card-extra-content">
+                    <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 0.9rem;">Objetivos Generales:</h4>
+                    <ul class="list-items" style="font-size: 0.85rem;">
+                        <li>Procesar información sobre el ejercicio profesional de Licenciados, Técnicos y Guías en el ámbito de agencias.</li>
+                        <li>Analizar normativas y colaborar en el posicionamiento institucional frente a nuevos reglamentos y leyes.</li>
+                        <li>Diseñar instancias de actualización profesional, tanto propias como en convenio con otras instituciones.</li>
+                        <li>Crear Normas Técnicas para la figura del Responsable Técnico y otros roles clave en la intermediación.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card" onclick="toggleCard(this)" style="border-top-color: var(--accent);">
+                <span class="toggle-icon">▼</span>
+                <span class="comision-tag">Jóvenes</span>
+                <h3 class="delegacion-title">Comisión de Jóvenes</h3>
+                <p style="font-size: 0.95rem;">Espacio de articulación y nexo con estudiantes para impulsar la inserción laboral y el recambio generacional.</p>
+                
+                <div class="card-extra-content">
+                    <div style="background: var(--light-gray); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                        <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 0.9rem;">Estructura de la Comisión:</h4>
+                        <p style="font-size: 0.85rem; margin-bottom: 5px;"><strong>Presidencia:</strong> Lic. Amancay Romero Trucco</p>
+                        <p style="font-size: 0.85rem;"><strong>Coordinaciones Regionales:</strong> Representantes de cada Delegación Regional actuando como nexo con el Consejo Directivo.</p>
+                    </div>
+
+                    <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 0.9rem;">Objetivos Generales:</h4>
+                    <ul class="list-items" style="font-size: 0.85rem;">
+                        <li>Generar debates y propuestas sobre la inserción laboral y problemáticas del joven profesional.</li>
+                        <li>Actuar como nexo con estudiantes, Centros de Estudiantes y la ANET.</li>
+                        <li>Aportar una perspectiva joven en el análisis de leyes, reglamentos y posicionamientos del Colegio.</li>
+                        <li>Diseñar capacitaciones orientadas al mejoramiento del ejercicio profesional inicial.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="step-card" style="text-align: center; border-left: none; border-bottom: 5px solid var(--primary); margin-top: 60px;">
+            <h2 style="color: var(--primary);">¿Querés participar en una Comisión?</h2>
+            <p style="margin: 20px 0;">Tu aporte técnico es fundamental para el crecimiento del Colegio.</p>
+            <a href="/contacto.html" class="btn btn-primary">Postularme para una Comisión</a>
+        </div>
+    </section>
+
+    <!--/*FOOTER*/-->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+
+        function toggleCard(card) {
+            // Si quieres que solo haya una abierta a la vez, descomenta la siguiente línea:
+            // document.querySelectorAll('.info-card').forEach(c => { if(c !== card) c.classList.remove('active'); });
+
+            card.classList.toggle('active');
+        }
+
+        // NAVBAR
+        fetch('/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+        // FOOTER
+        fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    </script>
+</body>
+</html>

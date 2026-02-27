@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - CPTBA</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        /* Limpiamos el body para que no afecte a la navbar */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Esto permite que navbar, contenido y footer se apilen */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* Este es el truco: un contenedor que empuje al footer y se centre */
+        .login-wrapper {
+            flex: 1; /* Ocupa todo el espacio entre navbar y footer */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            /* Eliminamos margin y align-content que sobraban */
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+        
+        .login-header h1 {
+            font-size: 1.8rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .login-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .login-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .help-text {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .shake {
+            animation: shake 0.4s ease;
+        }
+    </style>
+</head>
+<body>
+    
+    <!--navbar-->
+    <div id="navbar-placeholder"></div>
+
+    <div class="login-wrapper">
+        <section class="section">
+            <div class="login-container">
+                <div class="login-header">
+                    <!--<img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="login-logo">-->
+                    <h1>Iniciar Sesión</h1>
+                    <p>Colegio de Profesionales en Turismo</p>
+                </div>
+                
+                <div id="alert" class="alert"></div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            placeholder="admin o número de matrícula"
+                            required 
+                            autocomplete="username"
+                            autofocus
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="••••••••"
+                            required 
+                            autocomplete="current-password"
+                        >
+                    </div>
+                    
+                    <button type="submit" class="btn-login" id="btnLogin">
+                        Ingresar
+                    </button>
+                </form>
+                
+                <div class="help-text">
+                    <strong>Colegiados:</strong> Usuario = Número de matrícula<br>
+                    <strong>Contraseña inicial:</strong> Su número de matrícula<br>
+                    <small>(Cambie su contraseña después del primer acceso)</small>
+                </div>
+                
+                <div class="login-footer">
+                    <a href="/">← Volver al sitio web</a>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!--/*FOOTER*/-->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const btnLogin = document.getElementById('btnLogin');
+        const alertBox = document.getElementById('alert');
+        const loginContainer = document.querySelector('.login-container');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Validación básica
+            if (!username || !password) {
+                showAlert('Por favor complete todos los campos', 'error');
+                return;
+            }
+            
+            // Deshabilitar botón
+            btnLogin.disabled = true;
+            btnLogin.textContent = 'Ingresando...';
+            hideAlert();
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showAlert('¡Bienvenido! Redirigiendo...', 'success');
+                    
+                    setTimeout(() => {
+                        // Redirigir según el rol
+                        if (data.rol === 'admin') {
+                            window.location.href = '/admin.html';
+                        } else {
+                            window.location.href = '/mi-cuenta.html';
+                        }
+                    }, 1000);
+                } else {
+                    showAlert(data.message || 'Usuario o contraseña incorrectos', 'error');
+                    loginContainer.classList.add('shake');
+                    setTimeout(() => loginContainer.classList.remove('shake'), 400);
+                    btnLogin.disabled = false;
+                    btnLogin.textContent = 'Ingresar';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión. Intente nuevamente.', 'error');
+                btnLogin.disabled = false;
+                btnLogin.textContent = 'Ingresar';
+            }
+        });
+        
+        function showAlert(message, type) {
+            alertBox.textContent = message;
+            alertBox.className = 'alert alert-' + type;
+            alertBox.style.display = 'block';
+        }
+        
+        function hideAlert() {
+            alertBox.style.display = 'none';
+        }
+        
+        // Limpiar alerta cuando se empieza a escribir
+        document.getElementById('username').addEventListener('input', hideAlert);
+        document.getElementById('password').addEventListener('input', hideAlert);
+
+        // NAVBAR
+        fetch('/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+        // FOOTER
+        fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    </script>
+</body>
+</html>

@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const Database = require('better-sqlite3');
 const nodemailer = require('nodemailer');
+const authSQL = fs.readFileSync('auth-schema.sql', 'utf8');
 
 const expressApp = express();
 const PORT = process.env.PORT || 3000;
@@ -14,11 +15,12 @@ expressApp.use(express.urlencoded({ extended: true }));
 // 2. BASE DE DATOS Y QUERIES (Tu lógica original completa)
 const db = new Database(path.join(__dirname, 'colegio.db'));
 db.pragma('journal_mode = WAL');
+db.exec(authSQL);
 
 const queries = {
   // News
   getAllNews: db.prepare('SELECT * FROM news ORDER BY created_at DESC'),
-  getFeaturedNews: db.prepare('SELECT * FROM news WHERE featured = 1 ORDER BY created_at DESC LIMIT 3'),
+  getFeaturedNews: db.prepare('SELECT * FROM news WHERE featured = 1 ORDER BY created_at DESC LIMIT 5'),
   getNewsById: db.prepare('SELECT * FROM news WHERE id = ?'),
   createNews: db.prepare('INSERT INTO news (title, content, excerpt, author, image_url, featured) VALUES (?, ?, ?, ?, ?, ?)'),
   updateNews: db.prepare('UPDATE news SET title = ?, content = ?, excerpt = ?, author = ?, image_url = ?, featured = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'),
@@ -49,16 +51,54 @@ const queries = {
   createAutoridad: db.prepare('INSERT INTO autoridades (tipo, cargo, apellido, nombre, matricula, categoria, delegacion_zona, orden, periodo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'),
   deleteAutoridad: db.prepare('DELETE FROM autoridades WHERE id = ?')
 };
+//=====================MIDDLEWARE================================================
+// Middleware simple de autorización
+const auth = (req, res, next) => {
+    const apiKey = req.headers['x-api-key'];
+    const MASTER_KEY = process.env.ADMIN_TOKEN || '5324920'; // Cambia '12345' por algo complejo
 
-// ==================== RUTAS DE LA API (IMPORTANTE EL ORDEN) ====================
+    if (apiKey && apiKey === MASTER_KEY) {
+        return next(); // Todo bien, sigue adelante
+    }
+    return res.status(401).json({ error: 'No autorizado. Se requiere API Key válida.' });
+};
+
+/// ==================== RUTAS DE LA API (IMPORTANTE EL ORDEN) ====================
 
 // --- NOTICIAS ---
 expressApp.get('/api/news/featured', (req, res) => res.json(queries.getFeaturedNews.all()));
 expressApp.get('/api/news', (req, res) => res.json(queries.getAllNews.all()));
+
 expressApp.get('/api/news/:id', (req, res) => {
     const news = queries.getNewsById.get(req.params.id);
-    if (news) res.json(news);
-    else res.status(404).json({ error: 'Noticia no encontrada' });
+    if (news) {
+        res.json(news);
+    } else {
+        res.status(404).json({ error: 'Noticia no encontrada' });
+    }
+}); // <--- ESTA ES LA QUE FALTABA PARA CERRAR EL GET
+
+expressApp.post('/api/news', auth, (req, res) => {
+    try {
+        const { title, content, excerpt, author, image_url, featured } = req.body;
+        
+        // Convertimos el checkbox (booleano) a 1 o 0 para SQLite
+        const isFeatured = featured ? 1 : 0;
+
+        const info = queries.createNews.run(
+            title, 
+            content, 
+            excerpt || '', 
+            author, 
+            image_url || null, 
+            isFeatured
+        );
+
+        res.status(201).json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error("Error al crear noticia:", error);
+        res.status(500).json({ error: "No se pudo guardar la noticia" });
+    }
 });
 
 // --- MIEMBROS Y BUSCADOR ---
@@ -67,7 +107,7 @@ expressApp.get('/api/members/search', (req, res) => {
     res.json(queries.searchMembers.all(s, s, s));
 });
 expressApp.get('/api/members', (req, res) => res.json(queries.getAllMembers.all()));
-expressApp.put('/api/members/:id', (req, res) => {
+expressApp.put('/api/members/:id',auth, (req, res) => {
     const { matricula, name, surname, specialty, phone, email, city, registration_date } = req.body;
     queries.updateMember.run(matricula, name, surname, specialty, phone, email, city, registration_date, req.params.id);
     res.json({ success: true });
@@ -77,7 +117,7 @@ expressApp.put('/api/members/:id', (req, res) => {
 expressApp.get('/api/autoridades/consejo-directivo', (req, res) => res.json(queries.getAutoridadesByTipo.all('consejo_directivo')));
 expressApp.get('/api/autoridades/comision-revisora', (req, res) => res.json(queries.getAutoridadesByTipo.all('comision_revisora')));
 expressApp.get('/api/autoridades/tribunal-etica', (req, res) => res.json(queries.getAutoridadesByTipo.all('tribunal_etica')));
-expressApp.delete('/api/autoridades/:id', (req, res) => {
+expressApp.delete('/api/autoridades/:id',auth, (req, res) => {
     queries.deleteAutoridad.run(req.params.id);
     res.json({ success: true });
 });

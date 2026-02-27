@@ -47,12 +47,8 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="navbar-brand"><img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo"> <span style="margin-left: 10px;">Admin</span></a>
-            <ul class="navbar-menu"><li><a href="/">← Volver al Sitio</a></li></ul>
-        </div>
-    </nav>
+    <!--navbar-->
+    <div id="navbar-placeholder"></div>
 
     <section class="section">
         <div class="container">
@@ -363,6 +359,9 @@
         </div>
     </section>
 
+    <!--/*FOOTER*/-->
+    <div id="footer-placeholder"></div>
+
     <script>
         // TAB NAVIGATION
         function showTab(tab) {
@@ -614,6 +613,18 @@
         loadAutoridades('consejo_directivo');
         loadAutoridades('comision_revisora');
         loadAutoridades('tribunal_etica');
+
+        // NAVBAR
+        fetch('/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+        // FOOTER
+        fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
     </script>
 </body>
 </html>

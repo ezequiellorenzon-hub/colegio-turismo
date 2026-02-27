@@ -12,9 +12,13 @@
     "profesionales"
   ],
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "better-sqlite3": "^11.5.0",
     "dotenv": "^17.3.1",
+    "ejs": "^4.0.1",
     "express": "^5.2.1",
-    "nodemailer": "^8.0.1"
+    "express-session": "^1.19.0",
+    "nodemailer": "^8.0.1",
+    "pdfkit": "^0.17.2"
   }
 }

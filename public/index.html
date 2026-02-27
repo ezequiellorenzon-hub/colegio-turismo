@@ -147,24 +147,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="navbar-brand">
-                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
-            </a>
-            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
-            <ul class="navbar-menu" id="navMenu">
-                <li><a href="/" class="active">Inicio</a></li>
-                <li><a href="/el-colegio.html">El Colegio</a></li>
-                <li><a href="/noticias.html">Noticias</a></li>
-                <li><a href="/comision.html">Comisión Directiva</a></li>
-                <li><a href="/matriculacion.html">Matriculación</a></li>
-                <li><a href="/matriculados.html">Matriculados</a></li>
-                <li><a href="/contacto.html">Contacto</a></li>
-                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div id="navbar-placeholder"></div>
 
     <!-- Hero Gallery -->
     <section class="hero-gallery">
@@ -196,10 +179,10 @@
                 </p>
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                     <a href="/matriculacion.html" class="btn" style="background: white; color: #667eea; font-size: 1rem; padding: 12px 30px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                        📋 Ver Información
+                        Ver Información
                     </a>
                     <a href="/contacto.html" class="btn" style="background: rgba(255,255,255,0.2); color: white; font-size: 1rem; padding: 12px 30px; border: 2px solid white; backdrop-filter: blur(10px);">
-                        💬 Consultar
+                        Consultar
                     </a>
                 </div>
             </div>
@@ -274,7 +257,7 @@
                     </div>
                     <h3 style="color: #2563eb; font-size: 1.5rem; margin-bottom: 15px; font-weight: 600;">Comisiones</h3>
                     <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">Nuestras comisiones de trabajo.</p>
-                    <a href="/comision.html" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.95rem;">Ver las comisiones</a>
+                    <a href="/comisiones.html" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.95rem;">Ver las comisiones</a>
                 </div>
                 
                 <div class="card" style="text-align: center; padding: 40px 30px;">
@@ -304,36 +287,8 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>Colegio de Profesionales en Turismo</h3>
-                    <p>Entidad reguladora del ejercicio profesional del turismo en Argentina.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Enlaces Rápidos</h3>
-                    <a href="/el-colegio.html">El Colegio</a>
-                    <a href="/noticias.html">Noticias</a>
-                    <a href="/comision.html">Comisión Directiva</a>
-                    <a href="/matriculados.html">Matriculados</a>
-                    <a href="/matriculacion.html">Matriculación</a>
-                    <a href="/contacto.html">Contacto</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Contacto</h3>
-                    <!--<p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f891969e97b89b97949d9f91978c8d8a918b9597d6978a9fd6998a">[email&#160;protected]</a></p>-->
-                    <a href="mailto:info@colegioturismo.org.ar">info@colegioturismo.org.ar</a>
-                    <p>Teléfono: +54 11 4567-8900</p>
-                    <p>Dirección: Av. Corrientes 1234, CABA</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+    <!--/*FOOTER*/-->
+    <div id="footer-placeholder"></div>
 
     <!--<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>-->
     <script>
@@ -514,6 +469,19 @@
         // Cargar al iniciar
         loadHeroGallery();
         loadFeaturedNews();
+
+        // NAVBAR
+        fetch('/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+        // FOOTER
+        fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
     </script>
 </body>
 </html>

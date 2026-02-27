@@ -6,8 +6,9 @@
   /* Paleta Premium 2026 */
   --primary: #4f46e5;
   --primary-dark: #3730a3;
-  --secondary: #10b981;
+  --secondary: #6366f1;
   --accent: #fbbf24;
+  --bg-site: #f1f5f9; /* Tono azul grisáceo muy suave para el fondo */
   
   --dark: #0f172a;
   --gray: #64748b;
@@ -32,10 +33,12 @@
 }
 
 body {
-  font-family: var(--font-primary);
+  font-family: 'Inter', sans-serif;
   line-height: 1.6;
-  color: var(--dark);
-  background: var(--light-gray); /* Cambiado a gris muy suave para resaltar componentes */
+  background-color: var(--bg-site); /* Aplicado a todo el sitio */
+  color: #667eea;
+  margin: 0;
+  padding: 0;
 }
 
 img {
@@ -56,13 +59,14 @@ a {
    ======================================== */
 
 .container {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 40px;
 }
 
 .section {
   padding: 100px 0; /* Más aire entre secciones */
+  color: #667eea;
 }
 
 .section-title {
@@ -82,41 +86,48 @@ a {
   margin: -25px auto 60px;
 }
 
+/* Unificación de Botones */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 32px;
-  border-radius: 50px; /* Estilo píldora moderna */
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-  transition: var(--transition);
-  font-size: 1rem;
-  gap: 8px;
+    display: inline-flex; /* Hace que el botón solo ocupe lo que necesita su texto */
+    align-items: center;
+    justify-content: center;
+    padding: 12px 32px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+    /*transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);*/
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    width: auto; 
+    min-width: 200px; /* Evita que botones con poco texto parezcan etiquetas */
+    box-sizing: border-box;
 }
 
+/* Botón Primario (Azul Fuerte) */
 .btn-primary {
-  background: var(--primary);
-  color: white;
-  box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.3);
+    background-color: var(--primary);
+    color: var(--white) !important;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+    background-color: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
 }
 
+/* Botón Secundario (Gris Azulado Sólido) */
 .btn-secondary {
-  background: white;
-  color: var(--primary);
-  border: 2px solid var(--primary);
+    background-color: #e2e8f0; /* Color sólido desde el inicio */
+    color: #475569 !important;
 }
 
 .btn-secondary:hover {
-  background: var(--primary);
-  color: white;
+    background-color: #cbd5e1;
+    color: #1e293b !important;
+    transform: translateY(-2px);
 }
 
 /* ========================================
@@ -282,19 +293,30 @@ td {
    ======================================== */
 
 .search-bar {
-  max-width: 600px;
-  margin: 0 auto 50px;
-  position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 100px;
+    padding: 5px 20px;
+    border: 2px solid #e2e8f0;
+    max-width: 600px;
+    margin: 0 auto 50px;
 }
 
 .search-bar input {
-  width: 100%;
-  padding: 18px 25px;
-  border: 2px solid #e2e8f0;
-  border-radius: 100px;
-  font-size: 1rem;
-  transition: var(--transition);
+    border: none;
+    padding: 12px;
+    flex-grow: 1;
+    outline: none;
 }
+
+.search-bar button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
 
 .search-bar input:focus {
   outline: none;
@@ -316,6 +338,31 @@ td {
   border-color: var(--primary);
   outline: none;
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+/* Buscador minimalista */
+.search-container {
+    position: relative;
+    max-width: 400px;
+    margin-bottom: 40px;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 12px 12px 12px 45px; /* Espacio para el icono a la izquierda */
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    font-size: 0.95rem;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+    pointer-events: none;
 }
 
 
@@ -398,4 +445,345 @@ td {
   .navbar-brand {
     order: 1;
   }
+}
+
+/*TARJETAS*/
+.info-card {
+    cursor: pointer; /* Indica que se puede cliquear */
+    overflow: hidden;
+}
+
+.card-extra-content {
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s ease-out;
+    padding-top: 0;
+}
+
+.info-card.active .card-extra-content {
+    max-height: 500px; /* Suficiente para el texto */
+    opacity: 1;
+    padding-top: 15px;
+    border-top: 1px dashed var(--light-gray);
+    margin-top: 15px;
+}
+
+.toggle-icon {
+    float: right;
+    transition: transform 0.3s;
+}
+
+.info-card.active .toggle-icon {
+    transform: rotate(180deg);
+}
+/*
+REDES SOCIALES
+*/
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    color: white; /* O var(--gray) si prefieres que sean grises al inicio */
+    transition: all 0.3s ease;
+}
+
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor; /* Esto permite cambiar el color con CSS */
+    stroke: currentColor;
+    stroke-width: 0; /* Para los que son sólidos */
+}
+
+/* Estilo para los que son solo trazos como Instagram */
+.social-icon[title="Instagram"] svg {
+    stroke-width: 2;
+    fill: none;
+}
+
+.social-icon:hover {
+    color: var(--accent); /* Cambia al color de destaque de tu web */
+    transform: translateY(-3px);
+}
+
+/* ========================================
+   LISTADO DE MATRICULADOS MODERNO
+   ======================================== */
+
+/* Contenedor principal */
+.table-container {
+    background: transparent; /* Quitamos el fondo del contenedor */
+    box-shadow: none;
+    border: none;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0 12px; /* Espacio entre filas */
+    border-collapse: separate; /* Necesario para el espaciado entre filas */
+}
+
+/* Encabezados más sutiles */
+thead tr {
+    background: transparent;
+}
+
+th {
+    font-size: 0.75rem; /* Más chico que el contenido */
+    text-transform: uppercase; /* Todo en mayúsculas */
+    letter-spacing: 0.12em; /* Espaciado entre letras (da aire) */
+    color: var(--gray); /* Un gris medio, no negro total */
+    font-weight: 500;
+    padding: 10px 20px;
+    border: none;
+    text-align: left;
+}
+
+/* Filas como Tarjetas (Cards) */
+tbody tr {
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border-radius: 12px;
+}
+
+tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+}
+
+/* Celdas individuales */
+td {
+    padding: 20px;
+    border: none;
+    background: var(--white);
+}
+
+/* Redondear esquinas de la "fila-tarjeta" */
+td:first-child {
+    border-radius: 12px 0 0 12px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+td:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+/* Badge para la Matrícula */
+.matricula-badge {
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.95rem;
+}
+
+/* Estilo para Ciudad y Especialidad */
+.text-secondary-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+}
+
+/* Email con estilo de botón suave */
+.email-link {
+    color: var(--primary);
+    background: var(--light-gray);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.email-link:hover {
+    background: var(--primary);
+    color: white !important;
+}
+
+/* Responsive: En móviles se convierte en cards apiladas */
+@media (max-width: 768px) {
+    thead { display: none; } /* Ocultamos cabecera en móvil */
+    
+    tbody tr {
+        display: block;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+    
+    td {
+        display: block;
+        text-align: right;
+        padding: 10px 15px;
+        position: relative;
+    }
+    
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        font-weight: 700;
+        color: var(--gray);
+    }
+}
+
+/* Estilos específicos para la Tab Honorarios */
+.honorarios-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.otium-card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0,0,0,0.03);
+}
+
+.download-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--light-gray);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 30px;
+    border: 1px dashed #cbd5e1;
+    transition: var(--transition);
+}
+
+.download-box:hover {
+    border-color: var(--primary);
+    background: #eff6ff;
+}
+
+.download-info h4 {
+    color: var(--dark);
+    margin-bottom: 4px;
+}
+
+.download-info p {
+    font-size: 0.85rem;
+    color: var(--gray);
+}
+
+/* Un botón de descarga más fino */
+.btn-download {
+    background: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Esto oculta todas las pestañas por defecto */
+/* Lógica de visualización (Versión estable) */
+.tab-content {
+    display: none; /* Desaparece totalmente */
+}
+
+.tab-content.active {
+    display: block !important; /* Aparece con prioridad */
+    animation: fadeInTab 0.4s ease-out forwards; /* 'forwards' mantiene el estado final */
+}
+
+@keyframes fadeInTab {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* --- Estilos para Matriculación --- */
+/* Estilo de Cards para que resalten sobre el fondo */
+.card, .step-card, .table-container {
+    background: var(--white) !important;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.step-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+
+.step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.step-number {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--primary);
+    background: rgba(79, 70, 229, 0.1);
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.price-tag {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--dark);
+}
+
+.price-tag.success {
+    color: var(--secondary);
+}
+
+.highlight-row {
+    background: #f0fdf4 !important; /* Verde muy clarito para el descuento */
+}
+
+.bank-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.bank-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+.btn-link {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: underline;
 }

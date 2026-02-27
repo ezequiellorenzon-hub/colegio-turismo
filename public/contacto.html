@@ -7,25 +7,8 @@
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="navbar-brand">
-                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
-            </a>
-            <button class="navbar-toggle" onclick="toggleMenu()" type="button">☰</button>
-            
-            <ul class="navbar-menu" id="navMenu">
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/el-colegio.html">El Colegio</a></li>
-                <li><a href="/noticias.html">Noticias</a></li>
-                <li><a href="/comision.html">Comisión Directiva</a></li>
-                <li><a href="/matriculacion.html">Matriculación</a></li>
-                <li><a href="/matriculados.html">Matriculados</a></li>
-                <li><a href="/contacto.html" class="active">Contacto</a></li>
-                <li><a href="/admin.html" class="btn-admin">Admin</a></li>
-            </ul>
-        </div>
-    </nav>
+    <!--navbar-->
+    <div id="navbar-placeholder"></div>
 
     <section class="section">
         <div class="container">
@@ -86,19 +69,8 @@
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA">
-                </div>
-                <div class="footer-info">
-                    <p>&copy; 2026 Colegio de Profesionales en Turismo de la Pcia. de Bs. As.</p>
-                    <p>Todos los derechos reservados.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!--/*FOOTER*/-->
+    <div id="footer-placeholder"></div>
 
     <script>
         function toggleMenu() {
@@ -149,6 +121,19 @@
                 btnEnviar.innerText = 'Enviar mensaje';
                 btnEnviar.disabled = false;
             }
+        });
+
+        // NAVBAR
+        fetch('/navbar.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('navbar-placeholder').innerHTML = data;
+        });
+        // FOOTER
+        fetch('/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
         });
     </script>
 </body>

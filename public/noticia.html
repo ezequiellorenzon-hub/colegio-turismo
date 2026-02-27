@@ -54,24 +54,9 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="navbar-brand">
-                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
-            </a>
-            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
-            <ul class="navbar-menu" id="navMenu">
-                <li><a href="/" class="active">Inicio</a></li>
-                <li><a href="/el-colegio.html">El Colegio</a></li>
-                <li><a href="/noticias.html">Noticias</a></li>
-                <li><a href="/comision.html">Comisión Directiva</a></li>
-                <li><a href="/matriculacion.html">Matriculación</a></li>
-                <li><a href="/matriculados.html">Matriculados</a></li>
-                <li><a href="/contacto.html">Contacto</a></li>
-                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
-            </ul>
-        </div>
-    </nav>
+    
+    <!--navbar-->
+    <div id="navbar-placeholder"></div>
 
     <section class="section">
         <div class="container">
@@ -85,34 +70,8 @@
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>Colegio de Profesionales en Turismo</h3>
-                    <p>Entidad reguladora del ejercicio profesional del turismo en la Provincia de Buenos Aires.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Enlaces Rápidos</h3>
-                    <a href="/el-colegio.html">El Colegio</a>
-                    <a href="/noticias.html">Noticias</a>
-                    <a href="/comision.html">Comisión Directiva</a>
-                    <a href="/matriculados.html">Matriculados</a>
-                    <a href="/matriculacion.html">Matriculación</a>
-                    <a href="/contacto.html">Contacto</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Contacto</h3>
-                    <p>Email: info@colegioturismo.org.ar</p>
-                    <p>Teléfono: +54 11 4567-8900</p>
-                    <p>Dirección: Av. Corrientes 1234, CABA</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+    <!--/*FOOTER*/-->
+    <div id="footer-placeholder"></div>
 
     <script>
         function toggleMenu() {
@@ -225,6 +184,22 @@
         }
 
         loadArticle();
+
+        // NAVBAR
+        fetch('/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            })
+            .catch(err => console.error('Error cargando navbar:', err));
+
+        // FOOTER
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(err => console.error('Error cargando footer:', err));
     </script>
 </body>
 </html>

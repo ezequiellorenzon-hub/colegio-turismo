@@ -5,106 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matriculación - CPTBA</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="stylesheet" href="/assets/css/style.css">
     <style>
-        .steps-container {
-            display: grid;
-            gap: 30px;
-            margin: 40px 0;
-        }
-        .step-card {
-            background: white;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-left: 5px solid var(--primary);
-        }
+        /* Ajustes específicos para esta página */
         .step-number {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
+            background: var(--primary) !important; /* Fondo sólido para que no se pierda */
+            color: white !important;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 50%;
-            text-align: center;
-            line-height: 50px;
-            font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 15px;
         }
-        .cost-table, .payment-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        .cost-table th, .payment-table th {
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-        .cost-table td, .payment-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-        .cost-table tr:hover, .payment-table tr:hover {
-            background: var(--light-gray);
-        }
-        .highlight-row {
-            background: #fff3cd !important;
-            font-weight: 600;
-        }
-        .price {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        .discount {
-            color: #28a745;
-        }
-        .surcharge {
-            color: #dc3545;
-        }
-        .bank-info {
-            background: var(--light-gray);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .bank-info table {
-            width: 100%;
-        }
-        .bank-info td {
-            padding: 8px 0;
-        }
-        .bank-info td:first-child {
-            font-weight: 600;
-            width: 200px;
+        .step-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <a href="/" class="navbar-brand">
-                <img src="https://cptba.com.ar/wp-content/uploads/2022/07/Logo-nuevo-con-blanco.png" alt="Logo CPTBA" class="navbar-logo">
-            </a>
-            <button class="navbar-toggle" onclick="toggleMenu()">☰</button>
-            <ul class="navbar-menu" id="navMenu">
-                <li><a href="/" class="active">Inicio</a></li>
-                <li><a href="/el-colegio.html">El Colegio</a></li>
-                <li><a href="/noticias.html">Noticias</a></li>
-                <li><a href="/comision.html">Comisión Directiva</a></li>
-                <li><a href="/matriculacion.html">Matriculación</a></li>
-                <li><a href="/matriculados.html">Matriculados</a></li>
-                <li><a href="/contacto.html">Contacto</a></li>
-                <li><a href="/admin.html" class="btn btn-primary" style="padding: 8px 20px; border: 2px solid var(--accent); background: var(--accent);">Admin</a></li>
-            </ul>
-        </div>
-    </nav>
+
+    <div id="navbar-placeholder"></div>
 
     <section class="section">
         <div class="container">
@@ -112,193 +38,135 @@
             
             <div style="max-width: 1000px; margin: 0 auto;">
                 
-                <!-- Importancia de matricularse -->
                 <div class="card" style="margin-bottom: 40px;">
                     <div class="card-content">
                         <h2 style="color: var(--primary); margin-bottom: 20px;">¿Por qué es importante matricularse en el Colegio?</h2>
-                        <p style="line-height: 1.8; text-align: justify;">
-                            Matricularse en el Colegio de Profesionales en Turismo es esencial para obtener <strong>reconocimiento y legitimidad</strong> en la profesión. Esta inscripción certifica nuestra formación y experiencia, generando confianza en empresas y posibles clientes. Además, es un <strong>requisito legal para ejercer laboralmente en la provincia de Buenos Aires</strong>, a la vez que abre puertas a mejores oportunidades.
-                        </p>
-                        <p style="line-height: 1.8; text-align: justify; margin-top: 15px;">
-                            Pertenecer al Colegio de Profesionales en Turismo también ofrece beneficios, tales como <strong>descuentos en el acceso a cursos o seminarios</strong>, lo que nos permite realizar permanentes actualizaciones sobre las últimas tendencias. Ser parte de un colegio profesional brinda múltiples ventajas, como la posibilidad de conformar una <strong>red de contactos</strong> que facilita la colaboración y el intercambio de ideas y experiencias entre colegas.
-                        </p>
-                        <p style="line-height: 1.8; text-align: justify; margin-top: 15px;">
-                            Asimismo, nuestra institución trabaja para <strong>proteger los derechos de sus integrantes</strong>, promoviendo la ética profesional. De esta manera, la colegiatura en turismo constituye una garantía de respaldo, desarrollo continuo y oportunidades de crecimiento.
-                        </p>
+                        <p style="margin-bottom: 15px;">Matricularse en el Colegio de Profesionales en Turismo es esencial para obtener <strong>reconocimiento y legitimidad</strong> en la profesión. Esta inscripción certifica nuestra formación y experiencia, generando confianza en empresas y posibles clientes. Además, es un <strong>requisito legal para ejercer laboralmente en la provincia de Buenos Aires</strong> (Ley 14.799), a la vez que abre puertas a mejores oportunidades.</p>
+                        <p>Pertenecer al Colegio también ofrece beneficios como descuentos en cursos, conformar una red de contactos y proteger los derechos de sus integrantes promoviendo la ética profesional.</p>
                     </div>
                 </div>
 
-                <!-- Pasos para la matriculación -->
                 <h2 style="color: var(--primary); margin-bottom: 30px; text-align: center;">Pasos para la Matriculación</h2>
-                
-                <div class="steps-container">
-                    <!-- Paso 1 -->
+                <div class="steps-grid">
                     <div class="step-card">
-                        <span class="step-number">1</span>
-                        <h3 style="color: var(--primary); margin-bottom: 15px;">Completar la Planilla de Solicitud</h3>
-                        <p style="line-height: 1.8; margin-bottom: 20px;">
-                            Completar la Planilla de Solicitud con datos personales y académicos, ingresando al link que figura aquí abajo, y que también está disponible en las redes sociales del Colegio.
-                        </p>
-                        <a href="#" class="btn btn-primary">📝 Acceder a la Planilla</a>
+                        <div>
+                            <span class="step-number">1</span>
+                            <h3>Planilla de Solicitud</h3>
+                            <p>Completar la planilla con datos personales y académicos ingresando al link oficial.</p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Acceder a la Planilla</a>
                     </div>
 
-                    <!-- Paso 2 -->
                     <div class="step-card">
-                        <span class="step-number">2</span>
-                        <h3 style="color: var(--primary); margin-bottom: 15px;">Presentar Documentación</h3>
-                        <p style="line-height: 1.8; margin-bottom: 15px;">
-                            Una vez completado el paso 1, recibirá un e-mail con el listado de la documentación que deberá presentar de manera virtual al siguiente e-mail: <strong>tesoreria.colegio.pba@gmail.com</strong>
-                        </p>
-                        <h4 style="margin-top: 20px; margin-bottom: 10px;">Documentación a presentar:</h4>
-                        <ul style="line-height: 1.8; margin-left: 30px;">
-                            <li>DNI, original y fotocopia</li>
-                            <li>Título/Diploma, original y fotocopia</li>
-                            <li>Analítico, original y fotocopia</li>
-                            <li>Declaración Jurada (se enviará por e-mail con las firmas correspondientes)</li>
-                        </ul>
-                        <a href="#" class="btn btn-secondary" style="margin-top: 15px;">📥 Descargar Declaración Jurada</a>
+                        <div>
+                            <span class="step-number">2</span>
+                            <h3>Documentación</h3>
+                            <p>Enviar de manera virtual:
+                                <ul style="font-size: 0.9rem; margin-top: 10px;">
+                                    <li>DNI, Título y Analítico.</li>
+                                    <li>Declaración Jurada firmada.</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <a href="#" class="btn btn-primary">Descargar DDJJ</a>
                     </div>
 
-                    <!-- Paso 3 -->
                     <div class="step-card">
-                        <span class="step-number">3</span>
-                        <h3 style="color: var(--primary); margin-bottom: 15px;">Abonar el Costo de Inscripción</h3>
-                        <p style="line-height: 1.8;">
-                            Una vez completado el paso 2, se le informará si su solicitud fue aceptada, para continuar con el proceso que implica abonar el costo de Inscripción a la Matrícula, concepto que se abona sólo una vez al ingresar al Colegio.
-                        </p>
+                        <div>
+                            <span class="step-number">3</span>
+                            <h3>Inscripción</h3>
+                            <p>Una vez aprobada la solicitud, abonás el costo de Inscripción a la Matrícula por única vez.</p>
+                        </div>
+                        <div style="padding: 12px; background: #f8fafc; border-radius: 8px; font-size: 0.8rem; text-align: center;">
+                            * Sujeto a aprobación
+                        </div>
                     </div>
                 </div>
 
-                <!-- Costos de Matriculación -->
-                <div class="card" style="margin: 40px 0;">
-                    <div class="card-content">
-                        <h2 style="color: var(--primary); margin-bottom: 20px;">Costos de Matriculación</h2>
-                        <p style="margin-bottom: 20px;"><em>Inscripción a la matrícula 2026: se paga solo una vez al ingresar al Colegio</em></p>
-                        
-                        <table class="cost-table">
-                            <thead>
-                                <tr>
-                                    <th>Tipo de Matrícula</th>
-                                    <th>Otium</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Matrícula General</td>
-                                    <td>5 Otium</td>
-                                    <td class="price">$60.000</td>
-                                </tr>
-                                <tr class="highlight-row">
-                                    <td>Profesionales graduados en los últimos 2 años<br><small>(Descuento especial)</small></td>
-                                    <td>2.5 Otium</td>
-                                    <td class="price discount">$30.000</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p style="text-align: right; color: var(--gray); font-size: 0.9rem; margin-top: 10px;">
-                            <em>Según actualización del Otium de Noviembre 2025</em>
-                        </p>
-                    </div>
+                <div class="table-container" style="margin-top: 40px;">
+                    <h2 style="padding: 20px 20px 0; font-size: 1.5rem;">Costos de Matriculación 2026</h2>
+                    <p style="padding: 0 20px 10px; font-size: 0.85rem; color: var(--gray);"><em>Se paga solo una vez al ingresar al Colegio</em></p>
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Matrícula</th>
+                                <th>Otium</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Matrícula General</td>
+                                <td>5 Otium</td>
+                                <td class="price-tag">$60.000</td>
+                            </tr>
+                            <tr class="highlight-row">
+                                <td>Profesionales graduados en los últimos 2 años</td>
+                                <td>2.5 Otium</td>
+                                <td class="price-tag success">$30.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- Cuota Anual -->
-                <div class="card" style="margin: 40px 0;">
-                    <div class="card-content">
-                        <h2 style="color: var(--primary); margin-bottom: 20px;">Cuota Anual</h2>
-                        
-                        <table class="cost-table">
-                            <thead>
-                                <tr>
-                                    <th>Modalidad</th>
-                                    <th>Período</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="highlight-row">
-                                    <td><strong>Pago con Descuento</strong></td>
-                                    <td>Hasta el 31 de marzo 2026</td>
-                                    <td class="price discount">$57.600</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Pago Total</strong></td>
-                                    <td>Hasta el 31 de julio 2026</td>
-                                    <td class="price">$72.000</td>
-                                </tr>
-                                <tr class="highlight-row">
-                                    <td><strong>Pago con Interés</strong></td>
-                                    <td>Desde el 1 de agosto 2026</td>
-                                    <td class="price surcharge">$86.400</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p style="text-align: right; color: var(--gray); font-size: 0.9rem; margin-top: 10px;">
-                            <em>Según actualización del Otium de Noviembre 2025</em>
-                        </p>
-                    </div>
+                <div class="table-container" style="margin-top: 30px;">
+                    <h2 style="padding: 20px 20px 0; font-size: 1.5rem;">Cuota Anual</h2>
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Modalidad</th>
+                                <th>Período</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight-row">
+                                <td><strong>Pago con Descuento</strong></td>
+                                <td>Hasta el 31 de marzo 2026</td>
+                                <td class="price-tag success">$57.600</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pago Total</strong></td>
+                                <td>Hasta el 31 de julio 2026</td>
+                                <td class="price-tag">$72.000</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pago con Interés</strong></td>
+                                <td>Desde el 1 de agosto 2026</td>
+                                <td class="price-tag" style="color: #dc3545;">$86.400</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- Medios de Pago -->
-                <div class="card" style="margin: 40px 0;">
+                <div class="card" style="margin-top: 40px;">
                     <div class="card-content">
                         <h2 style="color: var(--primary); margin-bottom: 20px;">Medios de Pago</h2>
                         
-                        <!-- Mercado Pago -->
-                        <h3 style="color: var(--primary); margin-bottom: 15px;">💳 Mercado Pago</h3>
-                        <p style="line-height: 1.8; margin-bottom: 20px;">
-                            Deberá enviar un mail a la Tesorería indicando los conceptos a abonar. Se le generará un link de pago por el importe total + el 3% de Costo Financiero Total (CFT) de la plataforma el cual será enviado por mail.
-                        </p>
-                        <p style="line-height: 1.8; margin-bottom: 30px;">
-                            Una vez realizado el pago, y en el caso de ser aprobado, le llegará un mail de Mercado Pago confirmando el mismo. A su vez llegará a la Tesorería la confirmación y aprobación del pago realizado, por lo que le será enviado un e-mail confirmando el pago de la Matrícula/Cuota Anual.
-                        </p>
-
-                        <!-- Transferencia Bancaria -->
-                        <h3 style="color: var(--primary); margin-bottom: 15px;">🏦 Transferencia o Depósito Bancario</h3>
+                        <div style="margin-bottom: 30px;">
+                            <h3>Mercado Pago</h3>
+                            <p>Deberá enviar un mail a la Tesorería indicando los conceptos a abonar. Se le generará un link de pago por el importe total + el 3% de Costo Financiero Total (CFT) de la plataforma.</p>
+                        </div>
                         
-                        <div class="bank-info">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td>Banco:</td>
-                                        <td><strong>BANCO PROVINCIA</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tipo de Cuenta:</td>
-                                        <td>Cuenta Corriente</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Titular:</td>
-                                        <td><strong>COL DE PROFESIONALES EN TURISMO DE LA PROV DE BUENOS AIRES</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Número de Cuenta:</td>
-                                        <td><strong>2000-53861/3</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>CUIL/CUIT:</td>
-                                        <td><strong>30-71532035-1</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>CBU:</td>
-                                        <td><strong>0140999801200005386139</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Alias:</td>
-                                        <td><strong>colegioturismo.pba</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="otium-card" style="background: var(--dark); color: white; padding: 30px; border-radius: 15px;">
+                            <h3 style="color: var(--accent); margin-bottom: 15px;">Transferencia o Depósito Bancario</h3>
+                            <div class="bank-grid">
+                                <div class="bank-item"><span>Banco:</span> <strong>BANCO PROVINCIA</strong></div>
+                                <div class="bank-item"><span>Tipo de Cuenta:</span> <strong>Cuenta Corriente</strong></div>
+                                <div class="bank-item"><span>Titular:</span> <strong>COL DE PROFESIONALES EN TURISMO DE LA PROV DE BS AS</strong></div>
+                                <div class="bank-item"><span>Número de Cuenta:</span> <strong>2000-53861/3</strong></div>
+                                <div class="bank-item"><span>CUIL/CUIT:</span> <strong>30-71532035-1</strong></div>
+                                <div class="bank-item"><span>CBU:</span> <strong>0140999801200005386139</strong></div>
+                                <div class="bank-item"><span>Alias:</span> <strong style="color: var(--accent);">colegioturismo.pba</strong></div>
+                            </div>
                         </div>
 
-                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin-top: 20px;">
-                            <strong>⚠️ IMPORTANTE:</strong> Recuerde que, una vez realizados los pagos, debe enviar un mail con el comprobante a 
-                            <a href="mailto:tesoreria.colegio.pba@gmail.com" style="color: var(--primary);">tesoreria.colegio.pba@gmail.com</a>
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin-top: 20px; color: #856404;">
+                            <strong>IMPORTANTE:</strong> Recuerde que, una vez realizados los pagos, debe enviar un mail con el comprobante a <a href="mailto:tesoreria.colegio.pba@gmail.com" style="color: var(--primary); font-weight: bold;">tesoreria.colegio.pba@gmail.com</a>.
                         </div>
                     </div>
                 </div>
 
-                <!-- Contacto -->
                 <div style="text-align: center; margin-top: 50px;">
                     <p style="margin-bottom: 20px; font-size: 1.1rem;">¿Tenés dudas sobre el proceso de matriculación?</p>
                     <a href="/contacto.html" class="btn btn-primary">Contactanos</a>
@@ -308,39 +176,22 @@
         </div>
     </section>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>Colegio de Profesionales en Turismo</h3>
-                    <p>Entidad reguladora del ejercicio profesional del turismo en la Provincia de Buenos Aires.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Enlaces Rápidos</h3>
-                    <a href="/el-colegio.html">El Colegio</a>
-                    <a href="/noticias.html">Noticias</a>
-                    <a href="/comision.html">Comisión Directiva</a>
-                    <a href="/matriculados.html">Matriculados</a>
-                    <a href="/matriculacion.html">Matriculación</a>
-                    <a href="/contacto.html">Contacto</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Contacto</h3>
-                    <p>Email: info@colegioturismo.org.ar</p>
-                    <p>Teléfono: +54 11 4567-8900</p>
-                    <p>Dirección: Av. Corrientes 1234, CABA</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Colegio de Profesionales en Turismo. Todos los derechos reservados.</p>
-            </div>
-        </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('navMenu').classList.toggle('active');
-        }
+        // Carga de Navbar
+        fetch('/navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+
+        // Carga de Footer
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
     </script>
 </body>
 </html>
