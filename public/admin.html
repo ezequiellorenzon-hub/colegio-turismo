@@ -44,10 +44,28 @@
             padding: 5px 15px;
             font-size: 0.9rem;
         }
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .form-header h2 {
+            margin: 0;
+        }
+        .btn-add {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 1.5rem;
+        }
     </style>
 </head>
 <body>
-    <!--navbar-->
     <div id="navbar-placeholder"></div>
 
     <section class="section">
@@ -56,19 +74,20 @@
             
             <div id="alert" class="alert"></div>
 
-            <!-- Tabs -->
             <div class="admin-tabs">
-                <button class="admin-tab active" onclick="showTab('news')">📰 Noticias</button>
-                <button class="admin-tab" onclick="showTab('board')">👥 Comisión Directiva</button>
-                <button class="admin-tab" onclick="showTab('members')">📜 Matriculados</button>
-                <button class="admin-tab" onclick="showTab('autoridades')">🏛️ Autoridades</button>
+                <button class="admin-tab active" onclick="showTab('news')">Noticias</button>
+                <button class="admin-tab" onclick="showTab('members')">Matriculados</button>
+                <button class="admin-tab" onclick="showTab('autoridades')">Autoridades</button>
             </div>
 
             <!-- NEWS TAB -->
             <div id="news-tab" class="admin-content active">
                 <div class="card" style="margin-bottom: 30px;">
                     <div class="card-content">
-                        <h2>Crear Nueva Noticia</h2>
+                        <div class="form-header">
+                            <h2>Crear Nueva Noticia</h2>
+                            <button type="button" class="btn btn-primary btn-add" onclick="clearNew()">+</button>
+                        </div>
                         <form id="news-form">
                             <div class="form-group">
                                 <label>Título *</label>
@@ -119,61 +138,14 @@
                 </div>
             </div>
 
-            <!-- BOARD TAB -->
-            <div id="board-tab" class="admin-content">
-                <div class="card" style="margin-bottom: 30px;">
-                    <div class="card-content">
-                        <h2>Agregar Miembro de Comisión</h2>
-                        <form id="board-form">
-                            <div class="form-group">
-                                <label>Nombre Completo *</label>
-                                <input type="text" class="form-control" name="name" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Cargo *</label>
-                                <input type="text" class="form-control" name="position" required placeholder="Ej: Presidente, Secretario, etc.">
-                            </div>
-                            <div class="form-group">
-                                <label>Biografía</label>
-                                <textarea class="form-control" name="bio"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Email</label>
-                                <input type="email" class="form-control" name="email">
-                            </div>
-                            <div class="form-group">
-                                <label>Orden de Aparición</label>
-                                <input type="number" class="form-control" name="order_position" value="0">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Agregar Miembro</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <h3 style="padding: 20px;">Comisión Directiva Actual</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Cargo</th>
-                                <th>Email</th>
-                                <th>Orden</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="board-list">
-                            <tr><td colspan="5" class="loading">Cargando</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
             <!-- MEMBERS TAB -->
             <div id="members-tab" class="admin-content">
                 <div class="card" style="margin-bottom: 30px;">
                     <div class="card-content">
-                        <h2>Registrar Nuevo Profesional</h2>
+                        <div class="form-header">
+                            <h2>Registrar Nuevo Profesional</h2>
+                            <button type="button" class="btn btn-primary btn-add" onclick="clearMember()">+</button>
+                        </div>
                         <form id="members-form">
                             <div class="form-group">
                                 <label>Matrícula *</label>
@@ -231,11 +203,14 @@
                 </div>
             </div>
 
-            <!-- AUTORIDADES TAB (Unificado) -->
+            <!-- AUTORIDADES TAB -->
             <div id="autoridades-tab" class="admin-content">
                 <div class="card" style="margin-bottom: 30px;">
                     <div class="card-content">
-                        <h2>Agregar Autoridad</h2>
+                        <div class="form-header">
+                            <h2>Agregar Autoridad</h2>
+                            <button type="button" class="btn btn-primary btn-add" onclick="clearAutoridad()">+</button>
+                        </div>
                         <form id="autoridades-form">
                             <div class="form-group">
                                 <label>Tipo de Autoridad *</label>
@@ -283,7 +258,6 @@
                     </div>
                 </div>
 
-                <!-- Tabs para ver cada tipo -->
                 <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--light-gray);">
                     <button class="admin-tab active" onclick="showAutoridadTipo('consejo_directivo')">Consejo Directivo</button>
                     <button class="admin-tab" onclick="showAutoridadTipo('comision_revisora')">Comisión Revisora</button>
@@ -359,7 +333,6 @@
         </div>
     </section>
 
-    <!--/*FOOTER*/-->
     <div id="footer-placeholder"></div>
 
     <script>
@@ -380,7 +353,32 @@
             setTimeout(() => alert.style.display = 'none', 3000);
         }
 
+        // CLEAR FUNCTIONS
+        function clearNew() {
+            const form = document.getElementById('news-form');
+            form.reset();
+            editingNewsId = null;
+            form.querySelector('button[type="submit"]').textContent = 'Publicar Noticia';
+        }
+
+        function clearMember() {
+            const form = document.getElementById('members-form');
+            form.reset();
+            editingMemberId = null;
+            form.querySelector('button[type="submit"]').textContent = 'Registrar Profesional';
+        }
+
+        function clearAutoridad() {
+            const form = document.getElementById('autoridades-form');
+            form.reset();
+            editingAutoridadId = null;
+            editingAutoridadTipo = null;
+            form.querySelector('button[type="submit"]').textContent = 'Agregar Autoridad';
+        }
+
         // ==================== NEWS ====================
+        let editingNewsId = null;
+
         async function loadNews() {
             const response = await fetch('/api/news');
             const news = await response.json();
@@ -391,10 +389,29 @@
                     <td>${new Date(n.created_at).toLocaleDateString()}</td>
                     <td>${n.featured ? '⭐ Sí' : 'No'}</td>
                     <td class="admin-table-actions">
+                        <button class="btn btn-secondary" onclick="editNews(${n.id})">Editar</button>
                         <button class="btn btn-danger" onclick="deleteNews(${n.id})">Eliminar</button>
                     </td>
                 </tr>
             `).join('');
+        }
+
+        function editNews(id) {
+            fetch(`/api/news/${id}`)
+                .then(res => res.json())
+                .then(news => {
+                    const form = document.getElementById('news-form');
+                    form.querySelector('[name="title"]').value = news.title;
+                    form.querySelector('[name="excerpt"]').value = news.excerpt || '';
+                    form.querySelector('[name="content"]').value = news.content;
+                    form.querySelector('[name="author"]').value = news.author;
+                    form.querySelector('[name="image_url"]').value = news.image_url || '';
+                    form.querySelector('[name="featured"]').checked = news.featured === 1;
+                    
+                    editingNewsId = id;
+                    form.querySelector('button[type="submit"]').textContent = 'Actualizar Noticia';
+                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
         }
 
         document.getElementById('news-form').addEventListener('submit', async (e) => {
@@ -409,13 +426,24 @@
                 featured: formData.get('featured') ? 1 : 0
             };
             
-            await fetch('/api/news', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+            if (editingNewsId) {
+                await fetch(`/api/news/${editingNewsId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                showAlert('✅ Noticia actualizada correctamente');
+                editingNewsId = null;
+                e.target.querySelector('button[type="submit"]').textContent = 'Publicar Noticia';
+            } else {
+                await fetch('/api/news', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                showAlert('✅ Noticia publicada correctamente');
+            }
             
-            showAlert('✅ Noticia publicada correctamente');
             e.target.reset();
             loadNews();
         });
@@ -427,67 +455,56 @@
             loadNews();
         }
 
-        // ==================== BOARD ====================
-        async function loadBoard() {
-            const response = await fetch('/api/board');
-            const board = await response.json();
-            document.getElementById('board-list').innerHTML = board.map(b => `
-                <tr>
-                    <td>${b.name}</td>
-                    <td>${b.position}</td>
-                    <td>${b.email || '-'}</td>
-                    <td>${b.order_position}</td>
-                    <td class="admin-table-actions">
-                        <button class="btn btn-danger" onclick="deleteBoard(${b.id})">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        document.getElementById('board-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = {
-                name: formData.get('name'),
-                position: formData.get('position'),
-                bio: formData.get('bio'),
-                email: formData.get('email'),
-                order_position: parseInt(formData.get('order_position'))
-            };
-            
-            await fetch('/api/board', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            
-            showAlert('✅ Miembro agregado correctamente');
-            e.target.reset();
-            loadBoard();
-        });
-
-        async function deleteBoard(id) {
-            if (!confirm('¿Eliminar este miembro?')) return;
-            await fetch(`/api/board/${id}`, { method: 'DELETE' });
-            showAlert('✅ Miembro eliminado');
-            loadBoard();
-        }
-
         // ==================== MEMBERS ====================
+        let editingMemberId = null;
+
         async function loadMembers() {
-            const response = await fetch('/api/members');
-            const members = await response.json();
-            document.getElementById('members-list').innerHTML = members.map(m => `
-                <tr>
-                    <td><strong>${m.matricula}</strong></td>
-                    <td>${m.surname}, ${m.name}</td>
-                    <td>${m.specialty || '-'}</td>
-                    <td>${m.city || '-'}</td>
-                    <td class="admin-table-actions">
-                        <button class="btn btn-danger" onclick="deleteMember(${m.id})">Eliminar</button>
-                    </td>
-                </tr>
-            `).join('');
+            try {
+                const response = await fetch('/api/members');
+                const members = await response.json();
+                document.getElementById('members-list').innerHTML = members.map(m => `
+                    <tr>
+                        <td><strong>${m.matricula}</strong></td>
+                        <td>${m.surname}, ${m.name}</td>
+                        <td>${m.specialty || '-'}</td>
+                        <td>${m.city || '-'}</td>
+                        <td class="admin-table-actions">
+                            <button class="btn btn-secondary" onclick="editMember(${m.id})">Editar</button>
+                            <button class="btn btn-danger" onclick="deleteMember(${m.id})">Eliminar</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error cargando members:', error);
+                showAlert('Error al cargar profesionales', 'error');
+            }
+        }
+
+        function editMember(id) {
+            fetch(`/api/members/${id}`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Error al obtener datos');
+                    return res.json();
+                })
+                .then(member => {
+                    const form = document.getElementById('members-form');
+                    form.querySelector('[name="matricula"]').value = member.matricula;
+                    form.querySelector('[name="name"]').value = member.name;
+                    form.querySelector('[name="surname"]').value = member.surname;
+                    form.querySelector('[name="specialty"]').value = member.specialty || '';
+                    form.querySelector('[name="city"]').value = member.city || '';
+                    form.querySelector('[name="phone"]').value = member.phone || '';
+                    form.querySelector('[name="email"]').value = member.email || '';
+                    form.querySelector('[name="registration_date"]').value = member.registration_date ? member.registration_date.split('T')[0] : '';
+                    
+                    editingMemberId = id;
+                    form.querySelector('button[type="submit"]').textContent = 'Actualizar Profesional';
+                    form.scrollIntoView({ behavior: 'smooth' });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Error al cargar datos del profesional', 'error');
+                });
         }
 
         document.getElementById('members-form').addEventListener('submit', async (e) => {
@@ -504,26 +521,56 @@
                 registration_date: formData.get('registration_date')
             };
             
-            await fetch('/api/members', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            
-            showAlert('✅ Profesional registrado correctamente');
-            e.target.reset();
-            loadMembers();
+            try {
+                if (editingMemberId) {
+                    const response = await fetch(`/api/members/${editingMemberId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (!response.ok) throw new Error('Error al actualizar');
+                    
+                    showAlert('✅ Profesional actualizado correctamente');
+                    editingMemberId = null;
+                    e.target.querySelector('button[type="submit"]').textContent = 'Registrar Profesional';
+                } else {
+                    const response = await fetch('/api/members', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (!response.ok) throw new Error('Error al crear');
+                    
+                    showAlert('✅ Profesional registrado correctamente');
+                }
+                
+                e.target.reset();
+                loadMembers();
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al guardar profesional', 'error');
+            }
         });
 
         async function deleteMember(id) {
             if (!confirm('¿Eliminar este profesional?')) return;
-            await fetch(`/api/members/${id}`, { method: 'DELETE' });
-            showAlert('✅ Profesional eliminado');
-            loadMembers();
+            try {
+                const response = await fetch(`/api/members/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Error al eliminar');
+                showAlert('✅ Profesional eliminado');
+                loadMembers();
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al eliminar profesional', 'error');
+            }
         }
 
-        // ==================== AUTORIDADES (Unificado) ====================
-        
+        // ==================== AUTORIDADES ====================
+        let editingAutoridadId = null;
+        let editingAutoridadTipo = null;
+
         function toggleDelegacionField(tipo) {
             const field = document.getElementById('delegacion-field');
             if (tipo === 'tribunal_etica') {
@@ -539,38 +586,81 @@
         }
 
         async function loadAutoridades(tipo) {
-            const response = await fetch(`/api/autoridades/${tipo.replace('_', '-')}`);
-            const data = await response.json();
-            
-            const tbody = document.getElementById(`list-${tipo}`);
-            if (tipo === 'tribunal_etica') {
-                tbody.innerHTML = data.map(m => `
-                    <tr>
-                        <td>${m.cargo}</td>
-                        <td>${m.apellido}</td>
-                        <td>${m.nombre}</td>
-                        <td>${m.matricula}</td>
-                        <td>${m.categoria}</td>
-                        <td class="admin-table-actions">
-                            <button class="btn btn-danger" onclick="deleteAutoridad(${m.id}, '${tipo}')">Eliminar</button>
-                        </td>
-                    </tr>
-                `).join('');
-            } else {
-                tbody.innerHTML = data.map(m => `
-                    <tr>
-                        <td>${m.cargo}</td>
-                        <td>${m.apellido}</td>
-                        <td>${m.nombre}</td>
-                        <td>${m.matricula}</td>
-                        <td>${m.categoria}</td>
-                        <td>${m.delegacion_zona || '-'}</td>
-                        <td class="admin-table-actions">
-                            <button class="btn btn-danger" onclick="deleteAutoridad(${m.id}, '${tipo}')">Eliminar</button>
-                        </td>
-                    </tr>
-                `).join('');
+            try {
+                const response = await fetch(`/api/autoridades/${tipo.replace('_', '-')}`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById(`list-${tipo}`);
+                if (tipo === 'tribunal_etica') {
+                    tbody.innerHTML = data.map(m => `
+                        <tr>
+                            <td>${m.cargo}</td>
+                            <td>${m.apellido}</td>
+                            <td>${m.nombre}</td>
+                            <td>${m.matricula}</td>
+                            <td>${m.categoria}</td>
+                            <td class="admin-table-actions">
+                                <button class="btn btn-secondary" onclick="editAutoridad(${m.id}, '${tipo}')">Editar</button>
+                                <button class="btn btn-danger" onclick="deleteAutoridad(${m.id}, '${tipo}')">Eliminar</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = data.map(m => `
+                        <tr>
+                            <td>${m.cargo}</td>
+                            <td>${m.apellido}</td>
+                            <td>${m.nombre}</td>
+                            <td>${m.matricula}</td>
+                            <td>${m.categoria}</td>
+                            <td>${m.delegacion_zona || '-'}</td>
+                            <td class="admin-table-actions">
+                                <button class="btn btn-secondary" onclick="editAutoridad(${m.id}, '${tipo}')">Editar</button>
+                                <button class="btn btn-danger" onclick="deleteAutoridad(${m.id}, '${tipo}')">Eliminar</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error cargando autoridades:', error);
+                showAlert(`Error al cargar ${tipo}`, 'error');
             }
+        }
+
+        function editAutoridad(id, tipo) {
+            fetch(`/api/autoridades/${tipo.replace('_', '-')}`)
+                .then(res => res.json())
+                .then(data => {
+                    const autoridad = data.find(a => a.id === id);
+                    if (!autoridad) {
+                        showAlert('No se encontró la autoridad', 'error');
+                        return;
+                    }
+                    
+                    const form = document.getElementById('autoridades-form');
+                    form.querySelector('[name="tipo"]').value = autoridad.tipo;
+                    form.querySelector('[name="cargo"]').value = autoridad.cargo;
+                    form.querySelector('[name="apellido"]').value = autoridad.apellido;
+                    form.querySelector('[name="nombre"]').value = autoridad.nombre;
+                    form.querySelector('[name="matricula"]').value = autoridad.matricula;
+                    form.querySelector('[name="categoria"]').value = autoridad.categoria;
+                    form.querySelector('[name="delegacion_zona"]').value = autoridad.delegacion_zona || '';
+                    form.querySelector('[name="orden"]').value = autoridad.orden || 0;
+                    form.querySelector('[name="periodo"]').value = autoridad.periodo || '2024-2026';
+                    
+                    toggleDelegacionField(autoridad.tipo);
+                    
+                    editingAutoridadId = id;
+                    editingAutoridadTipo = tipo;
+                    form.querySelector('button[type="submit"]').textContent = 'Actualizar Autoridad';
+                    
+                    showAutoridadTipo(tipo);
+                    form.scrollIntoView({ behavior: 'smooth' });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Error al cargar datos de la autoridad', 'error');
+                });
         }
 
         document.getElementById('autoridades-form').addEventListener('submit', async (e) => {
@@ -588,27 +678,55 @@
                 periodo: formData.get('periodo')
             };
             
-            await fetch('/api/autoridades', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            
-            showAlert('✅ Autoridad agregada correctamente');
-            e.target.reset();
-            loadAutoridades(data.tipo);
+            try {
+                if (editingAutoridadId) {
+                    const response = await fetch(`/api/autoridades/${editingAutoridadId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (!response.ok) throw new Error('Error al actualizar');
+                    
+                    showAlert('✅ Autoridad actualizada correctamente');
+                    editingAutoridadId = null;
+                    editingAutoridadTipo = null;
+                    e.target.querySelector('button[type="submit"]').textContent = 'Agregar Autoridad';
+                } else {
+                    const response = await fetch('/api/autoridades', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    if (!response.ok) throw new Error('Error al crear');
+                    
+                    showAlert('✅ Autoridad agregada correctamente');
+                }
+                
+                e.target.reset();
+                loadAutoridades(data.tipo);
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al guardar autoridad', 'error');
+            }
         });
 
         async function deleteAutoridad(id, tipo) {
             if (!confirm('¿Eliminar esta autoridad?')) return;
-            await fetch(`/api/autoridades/${id}`, { method: 'DELETE' });
-            showAlert('✅ Autoridad eliminada');
-            loadAutoridades(tipo);
+            try {
+                const response = await fetch(`/api/autoridades/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Error al eliminar');
+                showAlert('✅ Autoridad eliminada');
+                loadAutoridades(tipo);
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error al eliminar autoridad', 'error');
+            }
         }
 
-        // LOAD ALL
+        // ==================== INICIALIZACIÓN ====================
         loadNews();
-        loadBoard();
         loadMembers();
         loadAutoridades('consejo_directivo');
         loadAutoridades('comision_revisora');
@@ -616,15 +734,17 @@
 
         // NAVBAR
         fetch('/navbar.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('navbar-placeholder').innerHTML = data;
-        });
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-placeholder').innerHTML = data;
+            });
+
         // FOOTER
         fetch('/footer.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('footer-placeholder').innerHTML = data;
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
     </script>
 </body>
 </html>

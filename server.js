@@ -74,6 +74,14 @@ const queries = {
   
   // Autoridades
   getAutoridadesByTipo: db.prepare('SELECT * FROM autoridades WHERE tipo = ? AND activo = 1 ORDER BY orden'),
+  // Después de getAutoridadesByTipo
+  getAutoridadById: db.prepare('SELECT * FROM autoridades WHERE id = ?'),
+  updateAutoridad: db.prepare(`
+      UPDATE autoridades 
+      SET tipo = ?, cargo = ?, apellido = ?, nombre = ?, matricula = ?, 
+          categoria = ?, delegacion_zona = ?, orden = ?, periodo = ?
+      WHERE id = ?
+`  ),
   createAutoridad: db.prepare('INSERT INTO autoridades (tipo, cargo, apellido, nombre, matricula, categoria, delegacion_zona, orden, periodo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'),
   deleteAutoridad: db.prepare('DELETE FROM autoridades WHERE id = ?'),
   
@@ -310,6 +318,17 @@ expressApp.delete('/api/board/:id', requireAdmin, (req, res) => {
         res.status(500).json({ error: "No se pudo eliminar el miembro" });
     }
 });
+//ADMIN
+
+ expressApp.get('/api/board/:id', requireAdmin, (req, res) => {
+     try {
+      const board = queries.getBoardById.get(req.params.id);
+         if (!board) return res.status(404).json({ error: 'No encontrado' });
+         res.json(board);
+     } catch (error) {
+         res.status(500).json({ error: error.message });
+     }
+});
 
 // ==================== RUTAS DE API - MEMBERS ====================
 
@@ -357,6 +376,17 @@ expressApp.delete('/api/members/:id', requireAdmin, (req, res) => {
     }
 });
 
+// GET individual para members (AGREGAR ESTA)
+expressApp.get('/api/members/:id', requireAdmin, (req, res) => {
+    try {
+        const member = queries.getMemberById.get(req.params.id);
+        if (!member) return res.status(404).json({ error: 'No encontrado' });
+        res.json(member);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ==================== RUTAS DE API - AUTORIDADES ====================
 
 expressApp.get('/api/autoridades/consejo-directivo', (req, res) => {
@@ -392,6 +422,20 @@ expressApp.delete('/api/autoridades/:id', requireAdmin, (req, res) => {
     } catch (error) {
         console.error("Error al eliminar autoridad:", error);
         res.status(500).json({ error: "No se pudo eliminar la autoridad" });
+    }
+});
+
+expressApp.put('/api/autoridades/:id', requireAdmin, (req, res) => {
+    try {
+        const { tipo, cargo, apellido, nombre, matricula, categoria, delegacion_zona, orden, periodo } = req.body;
+        queries.updateAutoridad.run(
+            tipo, cargo, apellido, nombre, matricula, categoria, 
+            delegacion_zona, orden, periodo, req.params.id
+        );
+        res.json({ success: true });
+    } catch (error) {
+        console.error("Error al actualizar autoridad:", error);
+        res.status(500).json({ error: "No se pudo actualizar la autoridad" });
     }
 });
 

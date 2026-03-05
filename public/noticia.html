@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="/assets/images/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <title id="page-title">Noticia - Colegio de Turismo</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -100,6 +107,26 @@
                 
                 // Actualizar título de la página
                 document.getElementById('page-title').textContent = `${article.title} - Colegio de Turismo`;
+                // Actualizar meta tags dinámicamente (description, og)
+                function setMeta(name, content, isProperty = false) {
+                    if (!content) return;
+                    let selector = isProperty ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+                    let el = document.head.querySelector(selector);
+                    if (!el) {
+                        el = document.createElement('meta');
+                        if (isProperty) el.setAttribute('property', name);
+                        else el.setAttribute('name', name);
+                        document.head.appendChild(el);
+                    }
+                    el.setAttribute('content', content);
+                }
+
+                setMeta('description', article.excerpt || article.title);
+                setMeta('og:title', article.title, true);
+                setMeta('og:description', article.excerpt || article.title, true);
+                setMeta('og:image', article.image_url || '/assets/images/og-image.jpg', true);
+                setMeta('og:url', window.location.href, true);
+                document.title = `${article.title} - Colegio de Turismo`;
                 
                 // Renderizar artículo
                 const container = document.getElementById('article-container');
