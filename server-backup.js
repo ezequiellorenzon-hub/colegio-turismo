@@ -10,7 +10,7 @@ const multer = require('multer');
 
 const expressApp = express();
 const PORT = process.env.PORT || 3000;
-const uploadDir = 'public/assets/media_upload';
+const uploadDir = 'assets/media_upload';
 
 // 1. CONFIGURACIÓN INICIAL
 expressApp.use(express.json());
@@ -22,9 +22,9 @@ expressApp.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false,
+        secure: false, // true en producción con HTTPS
         httpOnly: true,
-        maxAge: 30 * 60 * 1000
+        maxAge: 30 * 60 * 1000 // 30 minutos
     }
 }));
 
@@ -32,7 +32,7 @@ expressApp.use(session({
 const db = new Database(path.join(__dirname, 'colegio.db'));
 db.pragma('journal_mode = WAL');
 
-// Ejecutar schemas
+// Ejecutar schema de autenticación si existe
 const authSchemaPath = path.join(__dirname, 'auth-schema.sql');
 if (fs.existsSync(authSchemaPath)) {
     try {
@@ -44,35 +44,22 @@ if (fs.existsSync(authSchemaPath)) {
     }
 }
 
-// Ejecutar schema de galería
-const gallerySchemaPath = path.join(__dirname, 'gallery-normalized-schema.sql');
-if (fs.existsSync(gallerySchemaPath)) {
-    try {
-        const gallerySQL = fs.readFileSync(gallerySchemaPath, 'utf8');
-        db.exec(gallerySQL);
-        console.log('✅ Tabla news_gallery verificada');
-    } catch (error) {
-        console.log('⚠️  Schema de galería ya ejecutado:', error.message);
-    }
-}
-
-// CARPETA DE IMÁGENES
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
+//CARPETA DE IMAGENES
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
+        // Guardamos con: Timestamp + Nombre original para que sea único
         cb(null, Date.now() + '-' + file.originalname);
     }
 });
 
 const upload = multer({ storage: storage });
 
-expressApp.use('public/assets/media_upload', express.static(path.join(__dirname, 'public/assets/media_upload')));
+// Servir la carpeta de subidas para que las fotos sean accesibles por URL
+// Esto hace que si una foto se llama '123.jpg', la puedas ver en http://localhost:3000/assets/media_upload/123.jpg
+expressApp.use('/assets/media_upload', express.static(path.join(__dirname, 'assets/media_upload')));
 
 // 4. QUERIES
 const queries = {
@@ -83,12 +70,6 @@ const queries = {
   createNews: db.prepare('INSERT INTO news (title, content, excerpt, author, image_url, featured) VALUES (?, ?, ?, ?, ?, ?)'),
   updateNews: db.prepare('UPDATE news SET title = ?, content = ?, excerpt = ?, author = ?, image_url = ?, featured = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?'),
   deleteNews: db.prepare('DELETE FROM news WHERE id = ?'),
-  
-  // News Gallery - NUEVO
-  getGalleryByNewsId: db.prepare('SELECT * FROM news_gallery WHERE news_id = ? ORDER BY image_order'),
-  createGalleryImage: db.prepare('INSERT INTO news_gallery (news_id, image_filename, image_order) VALUES (?, ?, ?)'),
-  deleteGalleryImage: db.prepare('DELETE FROM news_gallery WHERE id = ?'),
-  deleteGalleryByNewsId: db.prepare('DELETE FROM news_gallery WHERE news_id = ?'),
   
   // Board Members
   getAllBoard: db.prepare('SELECT * FROM board_members WHERE active = 1 ORDER BY order_position'),
@@ -112,13 +93,14 @@ const queries = {
   
   // Autoridades
   getAutoridadesByTipo: db.prepare('SELECT * FROM autoridades WHERE tipo = ? AND activo = 1 ORDER BY orden'),
+  // Después de getAutoridadesByTipo
   getAutoridadById: db.prepare('SELECT * FROM autoridades WHERE id = ?'),
   updateAutoridad: db.prepare(`
       UPDATE autoridades 
       SET tipo = ?, cargo = ?, apellido = ?, nombre = ?, matricula = ?, 
           categoria = ?, delegacion_zona = ?, orden = ?, periodo = ?
       WHERE id = ?
-  `),
+`  ),
   createAutoridad: db.prepare('INSERT INTO autoridades (tipo, cargo, apellido, nombre, matricula, categoria, delegacion_zona, orden, periodo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'),
   deleteAutoridad: db.prepare('DELETE FROM autoridades WHERE id = ?'),
   
@@ -167,6 +149,7 @@ const requireColegiado = (req, res, next) => {
 
 // ==================== RUTAS DE AUTENTICACIÓN ====================
 
+// Login
 expressApp.post('/api/auth/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -187,11 +170,13 @@ expressApp.post('/api/auth/login', async (req, res) => {
             return res.status(401).json({ success: false, message: 'Usuario o contraseña incorrectos' });
         }
         
+        // Crear sesión
         req.session.userId = user.id;
         req.session.username = user.username;
         req.session.rol = user.rol;
         req.session.memberId = user.member_id;
         
+        // Actualizar último acceso
         queries.updateLastAccess.run(user.id);
         
         console.log(`✅ Login exitoso: ${username} (${user.rol})`);
@@ -208,6 +193,7 @@ expressApp.post('/api/auth/login', async (req, res) => {
     }
 });
 
+// Logout
 expressApp.post('/api/auth/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -217,6 +203,7 @@ expressApp.post('/api/auth/logout', (req, res) => {
     });
 });
 
+// Verificar sesión
 expressApp.get('/api/auth/session', (req, res) => {
     if (req.session && req.session.userId) {
         res.json({
@@ -229,27 +216,38 @@ expressApp.get('/api/auth/session', (req, res) => {
     }
 });
 
+// Cambiar contraseña
 expressApp.post('/api/auth/cambiar-password', requireAuth, async (req, res) => {
     try {
-        const { currentPassword, newPassword } = req.body;
+        const { passwordActual, passwordNueva } = req.body;
+        
+        if (!passwordActual || !passwordNueva) {
+            return res.status(400).json({ success: false, message: 'Faltan datos' });
+        }
+        
+        if (passwordNueva.length < 4) {
+            return res.status(400).json({ success: false, message: 'La contraseña debe tener al menos 4 caracteres' });
+        }
         
         const user = queries.getUserById.get(req.session.userId);
-        const passwordMatch = await bcrypt.compare(currentPassword, user.password_hash);
+        const passwordMatch = await bcrypt.compare(passwordActual, user.password_hash);
         
         if (!passwordMatch) {
             return res.status(401).json({ success: false, message: 'Contraseña actual incorrecta' });
         }
         
-        const newHash = await bcrypt.hash(newPassword, 10);
+        const newHash = await bcrypt.hash(passwordNueva, 10);
         queries.updatePassword.run(newHash, req.session.userId);
         
         res.json({ success: true, message: 'Contraseña actualizada correctamente' });
+        
     } catch (error) {
-        console.error("Error al cambiar contraseña:", error);
-        res.status(500).json({ success: false, message: 'Error al cambiar contraseña' });
+        console.error('Error al cambiar contraseña:', error);
+        res.status(500).json({ success: false, message: 'Error en el servidor' });
     }
 });
-
+// ==================== RUTAS PERMISOS =============================
+// GET /api/admin/permisos - Obtener permisos del usuario logueado
 expressApp.get('/api/admin/permisos', requireAuth, (req, res) => {
     const permisos = {
         dashboard: true,
@@ -261,7 +259,7 @@ expressApp.get('/api/admin/permisos', requireAuth, (req, res) => {
     res.json(permisos);
 });
 
-// ==================== RUTAS DE API - NOTICIAS CON GALERÍA ====================
+// ==================== RUTAS DE API - NOTICIAS ====================
 
 expressApp.get('/api/news/featured', (req, res) => {
     res.json(queries.getFeaturedNews.all());
@@ -274,88 +272,60 @@ expressApp.get('/api/news', (req, res) => {
 expressApp.get('/api/news/:id', (req, res) => {
     const news = queries.getNewsById.get(req.params.id);
     if (news) {
-        // Agregar galería
-        const gallery = queries.getGalleryByNewsId.all(req.params.id);
-        news.gallery = gallery;
         res.json(news);
     } else {
         res.status(404).json({ error: 'Noticia no encontrada' });
     }
 });
 
-// POST - Crear noticia con galería
-expressApp.post('/api/news', requireAdmin, upload.fields([
-    { name: 'main_image', maxCount: 1 },
-    { name: 'gallery_images', maxCount: 10 }
-]), (req, res) => {
+/*expressApp.post('/api/news', requireAdmin, (req, res) => {
+    try {
+        const { title, content, excerpt, author, image_url, featured } = req.body;
+        const isFeatured = featured ? 1 : 0;
+        const info = queries.createNews.run(title, content, excerpt || '', author, image_url || null, isFeatured);
+        res.status(201).json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error("Error al crear noticia:", error);
+        res.status(500).json({ error: "No se pudo guardar la noticia" });
+    }
+});*/
+
+expressApp.post('/api/news', requireAdmin, upload.single('main_image'), (req, res) => {
     try {
         const { title, content, excerpt, author, featured } = req.body;
         const isFeatured = featured ? 1 : 0;
         
-        // Imagen principal
-        const mainImage = req.files['main_image'] ? req.files['main_image'][0].filename : null;
-        
-        // Crear noticia
-        const info = queries.createNews.run(
-            title, 
-            content, 
-            excerpt || '', 
-            author, 
-            mainImage, 
-            isFeatured
-        );
-        
-        const newsId = info.lastInsertRowid;
-        
-        // Guardar imágenes de galería
-        if (req.files['gallery_images']) {
-            req.files['gallery_images'].forEach((file, index) => {
-                queries.createGalleryImage.run(newsId, file.filename, index);
-            });
-        }
-        
-        res.status(201).json({ success: true, id: newsId });
+        // Si se subió una foto, usamos el nombre del archivo, si no, null
+        const imageName = req.file ? req.file.filename : null;
+
+        const info = queries.createNews.run(title, content, excerpt || '', author, imageName, isFeatured);
+        res.status(201).json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
         console.error("Error al crear noticia:", error);
         res.status(500).json({ error: "No se pudo guardar la noticia" });
     }
 });
 
-// PUT - Actualizar noticia con galería
-expressApp.put('/api/news/:id', requireAdmin, upload.fields([
-    { name: 'main_image', maxCount: 1 },
-    { name: 'gallery_images', maxCount: 10 }
-]), (req, res) => {
+/*expressApp.put('/api/news/:id', requireAdmin, (req, res) => {
+    try {
+        const { title, content, excerpt, author, image_url, featured } = req.body;
+        const isFeatured = featured ? 1 : 0;
+        queries.updateNews.run(title, content, excerpt || '', author, image_url || null, isFeatured, req.params.id);
+        res.json({ success: true });
+    } catch (error) {
+        console.error("Error al actualizar noticia:", error);
+        res.status(500).json({ error: "No se pudo actualizar la noticia" });
+    }
+});*/
+expressApp.put('/api/news/:id', requireAdmin, upload.single('main_image'), (req, res) => {
     try {
         const { title, content, excerpt, author, featured, existing_image } = req.body;
         const isFeatured = featured ? 1 : 0;
         
-        // Imagen principal: Nueva o mantener existente
-        const mainImage = req.files['main_image'] 
-            ? req.files['main_image'][0].filename 
-            : existing_image;
-        
-        // Actualizar noticia
-        queries.updateNews.run(
-            title, 
-            content, 
-            excerpt || '', 
-            author, 
-            mainImage, 
-            isFeatured, 
-            req.params.id
-        );
-        
-        // Agregar nuevas imágenes de galería (no eliminamos las existentes)
-        if (req.files['gallery_images']) {
-            const currentGallery = queries.getGalleryByNewsId.all(req.params.id);
-            const nextOrder = currentGallery.length;
-            
-            req.files['gallery_images'].forEach((file, index) => {
-                queries.createGalleryImage.run(req.params.id, file.filename, nextOrder + index);
-            });
-        }
-        
+        // Si hay foto nueva, usamos esa. Si no, mantenemos la que ya estaba (existing_image)
+        const imageName = req.file ? req.file.filename : existing_image;
+
+        queries.updateNews.run(title, content, excerpt || '', author, imageName, isFeatured, req.params.id);
         res.json({ success: true });
     } catch (error) {
         console.error("Error al actualizar noticia:", error);
@@ -363,7 +333,6 @@ expressApp.put('/api/news/:id', requireAdmin, upload.fields([
     }
 });
 
-// DELETE - Eliminar noticia (la galería se elimina automáticamente por CASCADE)
 expressApp.delete('/api/news/:id', requireAdmin, (req, res) => {
     try {
         queries.deleteNews.run(req.params.id);
@@ -374,40 +343,20 @@ expressApp.delete('/api/news/:id', requireAdmin, (req, res) => {
     }
 });
 
-// DELETE - Eliminar imagen individual de galería
-expressApp.delete('/api/news/gallery/:imageId', requireAdmin, (req, res) => {
-    try {
-        queries.deleteGalleryImage.run(req.params.imageId);
-        res.json({ success: true });
-    } catch (error) {
-        console.error("Error al eliminar imagen:", error);
-        res.status(500).json({ error: "No se pudo eliminar la imagen" });
-    }
-});
-
 // ==================== RUTAS DE API - BOARD ====================
 
 expressApp.get('/api/board', (req, res) => {
     res.json(queries.getAllBoard.all());
 });
 
-expressApp.get('/api/board/:id', (req, res) => {
-    const board = queries.getBoardById.get(req.params.id);
-    if (board) {
-        res.json(board);
-    } else {
-        res.status(404).json({ error: 'Miembro no encontrado' });
-    }
-});
-
 expressApp.post('/api/board', requireAdmin, (req, res) => {
     try {
         const { name, position, bio, photo_url, email, order_position } = req.body;
-        const info = queries.createBoard.run(name, position, bio || '', photo_url || null, email || null, order_position || 0);
+        const info = queries.createBoard.run(name, position, bio || '', photo_url || '', email || '', order_position || 0);
         res.status(201).json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
         console.error("Error al crear miembro:", error);
-        res.status(500).json({ error: "No se pudo guardar el miembro" });
+        res.status(500).json({ error: "No se pudo crear el miembro" });
     }
 });
 
@@ -431,40 +380,40 @@ expressApp.delete('/api/board/:id', requireAdmin, (req, res) => {
         res.status(500).json({ error: "No se pudo eliminar el miembro" });
     }
 });
+//ADMIN
+
+ expressApp.get('/api/board/:id', requireAdmin, (req, res) => {
+     try {
+      const board = queries.getBoardById.get(req.params.id);
+         if (!board) return res.status(404).json({ error: 'No encontrado' });
+         res.json(board);
+     } catch (error) {
+         res.status(500).json({ error: error.message });
+     }
+});
 
 // ==================== RUTAS DE API - MEMBERS ====================
+
+expressApp.get('/api/members/search', (req, res) => {
+    const s = `%${req.query.q || ''}%`;
+    res.json(queries.searchMembers.all(s, s, s));
+});
 
 expressApp.get('/api/members', (req, res) => {
     res.json(queries.getAllMembers.all());
 });
 
-expressApp.get('/api/members/search', (req, res) => {
-    const { q } = req.query;
-    if (!q) {
-        return res.json([]);
-    }
-    const searchTerm = `%${q}%`;
-    res.json(queries.searchMembers.all(searchTerm, searchTerm, searchTerm));
-});
-
 expressApp.post('/api/members', requireAdmin, (req, res) => {
     try {
         const { matricula, name, surname, specialty, phone, email, city, registration_date } = req.body;
-        const info = queries.createMember.run(matricula, name, surname, specialty || null, phone || null, email || null, city || null, registration_date || null);
+        const info = queries.createMember.run(
+            matricula, name, surname, specialty || '', phone || '', 
+            email || '', city || '', registration_date || new Date().toISOString()
+        );
         res.status(201).json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
-        console.error("Error al crear miembro:", error);
-        res.status(500).json({ error: "No se pudo guardar el miembro" });
-    }
-});
-
-expressApp.get('/api/members/:id', (req, res) => {
-    try {
-        const member = queries.getMemberById.get(req.params.id);
-        if (!member) return res.status(404).json({ error: 'Miembro no encontrado' });
-        res.json(member);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error("Error al crear profesional:", error);
+        res.status(500).json({ error: "No se pudo crear el profesional" });
     }
 });
 
@@ -474,8 +423,8 @@ expressApp.put('/api/members/:id', requireAdmin, (req, res) => {
         queries.updateMember.run(matricula, name, surname, specialty, phone, email, city, registration_date, req.params.id);
         res.json({ success: true });
     } catch (error) {
-        console.error("Error al actualizar miembro:", error);
-        res.status(500).json({ error: "No se pudo actualizar el miembro" });
+        console.error("Error al actualizar profesional:", error);
+        res.status(500).json({ error: "No se pudo actualizar el profesional" });
     }
 });
 
@@ -484,12 +433,13 @@ expressApp.delete('/api/members/:id', requireAdmin, (req, res) => {
         queries.deleteMember.run(req.params.id);
         res.json({ success: true });
     } catch (error) {
-        console.error("Error al eliminar miembro:", error);
-        res.status(500).json({ error: "No se pudo eliminar el miembro" });
+        console.error("Error al eliminar profesional:", error);
+        res.status(500).json({ error: "No se pudo eliminar el profesional" });
     }
 });
 
-expressApp.get('/api/members/:id/full', (req, res) => {
+// GET individual para members (AGREGAR ESTA)
+expressApp.get('/api/members/:id', requireAdmin, (req, res) => {
     try {
         const member = queries.getMemberById.get(req.params.id);
         if (!member) return res.status(404).json({ error: 'No encontrado' });
@@ -553,6 +503,7 @@ expressApp.put('/api/autoridades/:id', requireAdmin, (req, res) => {
 
 // ==================== RUTAS DE API - COLEGIADOS ====================
 
+// Obtener datos del colegiado logueado
 expressApp.get('/api/colegiado/mi-cuenta', requireColegiado, (req, res) => {
     try {
         const member = queries.getMemberByUserId.get(req.session.userId);
@@ -566,6 +517,7 @@ expressApp.get('/api/colegiado/mi-cuenta', requireColegiado, (req, res) => {
     }
 });
 
+// Actualizar datos del colegiado
 expressApp.put('/api/colegiado/mis-datos', requireColegiado, (req, res) => {
     try {
         const { phone, email, city } = req.body;
@@ -583,6 +535,7 @@ expressApp.put('/api/colegiado/mis-datos', requireColegiado, (req, res) => {
     }
 });
 
+// Obtener cuotas del colegiado
 expressApp.get('/api/colegiado/cuotas', requireColegiado, (req, res) => {
     try {
         const member = queries.getMemberByUserId.get(req.session.userId);
@@ -660,6 +613,7 @@ expressApp.post('/enviar-contacto', async (req, res) => {
 
 expressApp.use(express.static(path.join(__dirname, 'public')));
 
+// Fallback para rutas HTML
 expressApp.get('/:page', (req, res, next) => {
     const page = req.params.page;
     if (page.includes('.')) return next();
@@ -671,15 +625,18 @@ expressApp.get('/:page', (req, res, next) => {
     }
 });
 
+// 404 Handler
 expressApp.use((req, res) => {
     res.status(404).send('404 - Página no encontrada');
 });
 
+// Cerrar DB al terminar
 process.on('SIGINT', () => {
     console.log('\n👋 Cerrando servidor...');
     db.close();
     process.exit(0);
 });
+
 
 // ==================== INICIO ====================
 

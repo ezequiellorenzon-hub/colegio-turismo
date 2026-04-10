@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Noticias - CPTBA</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            padding: 25px;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 15px;
+            color: #64748b;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px;
+            border-top: 1px solid #f1f5f9;
+            color: #1e293b;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        #news-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        #submit-btn {
+            grid-column: span 2;
+            justify-self: end;
+            min-width: 200px;
+            margin-top: 10px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            padding-top: 25px;
+        }
+
+        @media (max-width: 768px) {
+            #news-form {
+                grid-template-columns: 1fr;
+            }
+            .full-width, #submit-btn {
+                grid-column: span 1;
+            }
+        }
+
+        .alert-success { 
+            background: #dcfce7; 
+            color: #166534; 
+            border: 1px solid #bbf7d0; 
+        }
+
+        td:last-child {
+            width: 150px;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .table-container .btn {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            margin: 0 2px;
+            display: inline-block;
+            width: auto;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Preview de imagen */
+        .image-preview {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .image-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .image-preview p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        /* Galería actual */
+        .current-gallery {
+            margin-top: 10px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .gallery-item {
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .gallery-item .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .gallery-item .delete-btn:hover {
+            background: rgba(255, 0, 0, 1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="alert" class="alert"></div>
+
+        <div class="card">
+            <div class="form-header">
+                <h2 id="form-title">Crear Nueva Noticia</h2>
+                <button type="button" class="btn btn-secondary" onclick="clearNew()">Limpiar / Nuevo</button>
+            </div>
+            <form id="news-form">
+                <div class="form-group full-width">
+                    <label>Título *</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Resumen</label>
+                    <input type="text" class="form-control" name="excerpt" placeholder="Breve resumen">
+                </div>
+                <div class="form-group">
+                    <label>Autor *</label>
+                    <input type="text" class="form-control" name="author" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Contenido *</label>
+                    <textarea class="form-control" name="content" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Imagen de Portada *</label>
+                    <input type="file" class="form-control" name="main_image" accept="image/*" id="main-image-input">
+                    <div id="main-image-preview"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Galería de Imágenes</label>
+                    <input type="file" class="form-control" name="gallery_images" accept="image/*" multiple>
+                    <small>Puedes seleccionar varias fotos a la vez.</small>
+                    <div id="current-gallery"></div>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="featured"> Noticia destacada
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submit-btn">Publicar Noticia</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <h3 style="padding: 20px;">Noticias Publicadas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="news-list">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let editingNewsId = null;
+        let currentMainImage = '';
+        let currentGallery = [];
+
+        function showAlert(message) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-success`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+        }
+
+        function clearNew() {
+            document.getElementById('news-form').reset();
+            editingNewsId = null;
+            currentMainImage = '';
+            currentGallery = [];
+            document.getElementById('main-image-preview').innerHTML = '';
+            document.getElementById('current-gallery').innerHTML = '';
+            document.getElementById('form-title').textContent = 'Crear Nueva Noticia';
+            document.getElementById('submit-btn').textContent = 'Publicar Noticia';
+            document.getElementById('main-image-input').required = true;
+        }
+
+        async function loadNews() {
+            const response = await fetch('/api/news');
+            const news = await response.json();
+            document.getElementById('news-list').innerHTML = news.map(n => `
+                <tr>
+                    <td><strong>${n.title}</strong></td>
+                    <td>${n.author}</td>
+                    <td>${new Date(n.created_at).toLocaleDateString()}</td>
+                    <td>${n.featured ? '⭐ Destacada' : 'Normal'}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editNews(${n.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteNews(${n.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function editNews(id) {
+            try {
+                const res = await fetch(`/api/news/${id}`);
+                const news = await res.json();
+                
+                const form = document.getElementById('news-form');
+                form.querySelector('[name="title"]').value = news.title;
+                form.querySelector('[name="excerpt"]').value = news.excerpt || '';
+                form.querySelector('[name="content"]').value = news.content;
+                form.querySelector('[name="author"]').value = news.author;
+                form.querySelector('[name="featured"]').checked = news.featured === 1;
+                
+                editingNewsId = id;
+                currentMainImage = news.image_url || '';
+                currentGallery = news.gallery || [];
+                
+                // Mostrar imagen actual
+                if (news.image_url) {
+                    showMainImagePreview(news.image_url);
+                }
+                
+                // Mostrar galería actual
+                if (news.gallery && news.gallery.length > 0) {
+                    showCurrentGallery(news.gallery);
+                }
+                
+                document.getElementById('form-title').textContent = 'Editando Noticia';
+                document.getElementById('submit-btn').textContent = 'Actualizar Noticia';
+                document.getElementById('main-image-input').required = false;
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('❌ Error al cargar noticia');
+            }
+        }
+
+        function showMainImagePreview(imageName) {
+            const preview = document.getElementById('main-image-preview');
+            preview.innerHTML = `
+                <div class="image-preview">
+                    <p>Imagen actual:</p>
+                    <img src="/assets/media_upload/${imageName}" 
+                         onerror="this.src='/assets/{css,js,images}/placeholder.jpg'">
+                    <p style="font-size: 0.85rem; margin-top: 5px;">
+                        Subí una nueva imagen para reemplazarla, o dejá el campo vacío para mantenerla.
+                    </p>
+                </div>
+            `;
+        }
+
+        function showCurrentGallery(gallery) {
+            const container = document.getElementById('current-gallery');
+            if (gallery.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="current-gallery">
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 10px;">Galería actual:</p>
+                    <div class="gallery-grid">
+                        ${gallery.map(img => `
+                            <div class="gallery-item">
+                                <img src="/assets/media_upload/${img.image_filename}" 
+                                     onerror="this.src='/assets/{css,js,images}s/placeholder.jpg'">
+                                <button type="button" class="delete-btn" onclick="deleteGalleryImage(${img.id})" title="Eliminar">×</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="color: #666; font-size: 0.85rem; margin-top: 10px;">
+                        Las nuevas imágenes que agregues se sumarán a estas.
+                    </p>
+                </div>
+            `;
+        }
+
+        async function deleteGalleryImage(imageId) {
+            if (!confirm('¿Eliminar esta imagen de la galería?')) return;
+            
+            try {
+                await fetch(`/api/news/gallery/${imageId}`, { method: 'DELETE' });
+                showAlert('✅ Imagen eliminada de la galería');
+                
+                // Recargar la noticia para actualizar la galería
+                if (editingNewsId) {
+                    editNews(editingNewsId);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('❌ Error al eliminar imagen');
+            }
+        }
+
+        document.getElementById('news-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            if (editingNewsId) {
+                formData.append('existing_image', currentMainImage);
+            }
+
+            const url = editingNewsId ? `/api/news/${editingNewsId}` : '/api/news';
+            const method = editingNewsId ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    body: formData 
+                });
+
+                if (!response.ok) throw new Error('Error en la respuesta');
+
+                showAlert(editingNewsId ? '✅ Noticia actualizada' : '✅ Noticia publicada');
+                clearNew();
+                loadNews();
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('❌ Error al guardar noticia');
+            }
+        });
+
+        async function deleteNews(id) {
+            if (!confirm('¿Seguro que desea eliminar esta noticia?')) return;
+            
+            try {
+                await fetch(`/api/news/${id}`, { method: 'DELETE' });
+                showAlert('✅ Noticia eliminada');
+                loadNews();
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('❌ Error al eliminar noticia');
+            }
+        }
+
+        loadNews();
+    </script>
+</body>
+</html>

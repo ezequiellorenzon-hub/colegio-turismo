@@ -8,12 +8,13 @@
     <meta property="og:description" content="Noticias, comunicados y recursos para los profesionales del turismo.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://colegioturismo.org.ar/">
-    <meta property="og:image" content="/assets/images/og-image.jpg">
+    <meta property="og:image" content="/assets/{css,js,images}+
+    /og-image.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <title>Colegio de Profesionales en Turismo</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="/assets/{css,js,images}/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/{css,js,images}/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/{css,js,images}/favicon-16x16.png">
     <link rel="stylesheet" href="/assets/css/style.css">
     <style>
         /* Hero Gallery Styles */
@@ -341,29 +342,29 @@
             }
         }
 
-        function displayHeroGallery() {
+        /*function displayHeroGallery() {
             const gallery = document.getElementById('heroGallery');
             const dots = document.getElementById('galleryDots');
             
-            console.log('displayHeroGallery - heroNews:', heroNews);
-            console.log('gallery element:', gallery);
-            console.log('dots element:', dots);
-            
-            if (!gallery || !dots) {
-                console.error('No se encontraron los elementos de la galería');
-                return;
-            }
+            if (!gallery || !dots) return;
             
             gallery.innerHTML = heroNews.map((news, index) => {
-                console.log(`Procesando noticia ${index}:`, news);
+                // 1. Construimos la URL de la imagen (sin el prefijo 'public')
+                const imagePath = news.image_url ? `/assets/media_upload/${news.image_url}` : null;
+                
+                // 2. Definimos el fondo: si hay imagen usamos gradiente + url, si no, solo el gradiente sólido
+                const backgroundStyle = imagePath 
+                    ? `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('${imagePath}')`
+                    : `linear-gradient(135deg, #1e293b 0%, #0f172a 100%)`;
+
                 return `
-                <div class="gallery-slide ${index === 0 ? 'active' : ''}" style="background-image: ${news.image_url ? `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url(${news.image_url})` : 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)'};">
+                <div class="gallery-slide ${index === 0 ? 'active' : ''}" style="background-image: ${backgroundStyle};">
                     <div class="slide-content">
                         <div class="container">
                             <h1>${escapeHtml(news.title)}</h1>
-                            <p>${escapeHtml(news.excerpt || news.content?.substring(0, 150) || '')}${news.excerpt || news.content ? '...' : ''}</p>
+                            <p>${escapeHtml(news.excerpt || news.content?.substring(0, 150) || '')}...</p>
                             ${news.id 
-                              ? `<a href="/noticia.html?id=${news.id}" class="btn btn-primary" style="background: var(--accent); border: none;">Leer Más</a>` 
+                              ? `<a href="/noticia.html?id=${news.id}" class="btn btn-primary">Leer Más</a>` 
                               : `<a href="/matriculados.html" class="btn btn-secondary">Ver Profesionales</a>`
                             }
                         </div>
@@ -375,8 +376,45 @@
             dots.innerHTML = heroNews.map((_, index) => `
                 <span class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>
             `).join('');
+        }*/
+        
+        function displayHeroGallery() {
+            const gallery = document.getElementById('heroGallery');
+            const dots = document.getElementById('galleryDots');
             
-            console.log('Galería renderizada exitosamente');
+            if (!gallery || !dots) return;
+            
+            gallery.innerHTML = heroNews.map((news, index) => {
+                // 1. Ruta de la imagen (ajustada a la estructura de public)
+                const imagePath = news.image_url ? `/assets/media_upload/${news.image_url}` : null;
+                
+                // 2. Estilo de fondo
+                const backgroundStyle = imagePath 
+                    ? `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('${imagePath}')`
+                    : `linear-gradient(135deg, #1e293b 0%, #0f172a 100%)`;
+
+                // 3. Lógica del Botón: Si tiene ID es una noticia, si no, es un banner genérico
+                const buttonHtml = news.id 
+                    ? `<a href="/noticia.html?id=${news.id}" class="btn btn-primary" style="background: var(--accent); border: none; padding: 12px 25px; text-decoration: none; display: inline-block; border-radius: 5px;">Leer Noticia Completa</a>`
+                    : `<a href="/matriculacion.html" class="btn btn-secondary">Ver Requisitos de Matriculación</a>`;
+
+                return `
+                <div class="gallery-slide ${index === 0 ? 'active' : ''}" style="background-image: ${backgroundStyle};">
+                    <div class="slide-content">
+                        <div class="container">
+                            <h1 style="margin-bottom: 10px;">${escapeHtml(news.title)}</h1>
+                            <p style="margin-bottom: 25px;">${escapeHtml(news.excerpt || news.content?.substring(0, 120) || '')}...</p>
+                            ${buttonHtml}
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+            
+            // Generar los puntitos de navegación
+            dots.innerHTML = heroNews.map((_, index) => `
+                <span class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>
+            `).join('');
         }
 
         function nextSlide() {
@@ -427,7 +465,7 @@
             });
         });
 
-        async function loadFeaturedNews() {
+        /*async function loadFeaturedNews() {
             try {
                 const response = await fetch('/api/news/featured');
                 const news = await response.json();
@@ -441,7 +479,7 @@
                 
                 container.innerHTML = news.map(item => `
                     <div class="card fade-in">
-                        ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}" class="card-image">` : '<div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
+                        ${item.image_url ? `<img src="/assets/media_upload/${item.image_url}" alt="${item.title}" class="card-image">` : '<div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'}
                         <div class="card-content">
                             <h3 class="card-title">${escapeHtml(item.title)}</h3>
                             <p class="card-text">${escapeHtml(item.excerpt || item.content.substring(0, 150))}...</p>
@@ -451,6 +489,38 @@
                             </div>
                         </div>
                     </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }*/
+        async function loadFeaturedNews() {
+            try {
+                const response = await fetch('/api/news/featured');
+                const news = await response.json();
+                
+                const container = document.getElementById('featured-news');
+                
+                if (!news || news.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--gray);">No hay noticias</p>';
+                    return;
+                }
+                
+                container.innerHTML = news.map(item => `
+                    <a href="/noticia.html?id=${item.id}" class="card fade-in" style="text-decoration: none; color: inherit; display: block;">
+                        ${item.image_url 
+                            ? `<img src="/assets/media_upload/${item.image_url}" alt="${item.title}" class="card-image">` 
+                            : '<div class="card-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>'
+                        }
+                        <div class="card-content">
+                            <h3 class="card-title">${escapeHtml(item.title)}</h3>
+                            <p class="card-text">${escapeHtml(item.excerpt || item.content.substring(0, 150))}...</p>
+                            <div class="card-meta">
+                                <span>Autor: ${escapeHtml(item.author)}</span>
+                                <span>${formatDate(item.created_at)}</span>
+                            </div>
+                        </div>
+                    </a>
                 `).join('');
             } catch (error) {
                 console.error('Error:', error);

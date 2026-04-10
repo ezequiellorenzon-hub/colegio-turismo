@@ -10,7 +10,7 @@ const multer = require('multer');
 
 const expressApp = express();
 const PORT = process.env.PORT || 3000;
-const uploadDir = 'public/assets/media_upload';
+const uploadDir = 'assets/media_upload';
 
 // 1. CONFIGURACIÓN INICIAL
 expressApp.use(express.json());
@@ -72,7 +72,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-expressApp.use('public/assets/media_upload', express.static(path.join(__dirname, 'public/assets/media_upload')));
+expressApp.use('/assets/media_upload', express.static(path.join(__dirname, 'assets/media_upload')));
 
 // 4. QUERIES
 const queries = {

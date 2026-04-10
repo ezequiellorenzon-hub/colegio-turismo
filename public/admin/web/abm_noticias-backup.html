@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Noticias - CPTBA</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .container {
+            width: 95%;         /* Ocupa casi todo el ancho disponible */
+            max-width: 1600px;  /* Un límite mucho más alto para pantallas ultra-wide */
+            margin: 0 auto;
+        }
+
+        /* Estilo para los formularios en el Dashboard */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            padding: 25px;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Tabla estilizada */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 15px;
+            color: #64748b;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px;
+            border-top: 1px solid #f1f5f9;
+            color: #1e293b;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* CONFIGURACIÓN DE LA GRILLA */
+        #news-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+            gap: 20px;
+        }
+
+        /* Esta clase hará que Título, Contenido y Botón usen todo el ancho */
+        .full-width {
+            grid-column: span 2;
+        }
+
+        /* El botón a la derecha */
+        #submit-btn {
+            grid-column: span 2;
+            justify-self: end;
+            min-width: 200px;
+            margin-top: 10px;
+        }
+
+        /* Alineación del checkbox con el campo de URL */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            padding-top: 25px; 
+        }
+
+        /* Responsive: Una sola columna en celulares */
+        @media (max-width: 768px) {
+            #news-form {
+                grid-template-columns: 1fr;
+            }
+            .full-width, #submit-btn {
+                grid-column: span 1;
+            }
+        }
+
+
+        .alert-success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+
+        /* Ajuste para la columna de acciones */
+        td:last-child {
+            width: 150px; /* Limitamos el ancho de la columna */
+            white-space: nowrap; /* Evita que los botones se pongan uno arriba del otro */
+            text-align: center;
+        }
+
+        /* Botones de la grilla más pequeños y prolijos */
+        .table-container .btn {
+            padding: 6px 12px; /* Reducimos el relleno interno */
+            font-size: 0.8rem;  /* Fuente más pequeña */
+            margin: 0 2px;      /* Separación mínima entre botones */
+            display: inline-block;
+            width: auto;        /* Evita que hereden anchos raros */
+        }
+
+        /* Efecto hover suave */
+        .btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="alert" class="alert"></div>
+
+        <div class="card">
+            <div class="form-header">
+                <h2 id="form-title">Crear Nueva Noticia</h2>
+                <button type="button" class="btn btn-secondary" onclick="clearNew()">Limpiar / Nuevo</button>
+            </div>
+            <form id="news-form">
+                <div class="form-group full-width">
+                    <label>Título *</label>
+                    <input type="text" class="form-control" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Resumen</label>
+                    <input type="text" class="form-control" name="excerpt" placeholder="Breve resumen">
+                </div>
+                <div class="form-group">
+                    <label>Autor *</label>
+                    <input type="text" class="form-control" name="author" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Contenido *</label>
+                    <textarea class="form-control" name="content" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Imagen de Portada *</label>
+                    <input type="file" class="form-control" name="main_image" accept="image/*" required>
+                </div>
+                <div class="form-group full-width">
+                    <label>Galería de Imágenes</label>
+                    <input type="file" class="form-control" name="gallery_images" accept="image/*" multiple>
+                    <small>Puedes seleccionar varias fotos a la vez.</small>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" name="featured"> Noticia destacada
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submit-btn">Publicar Noticia</button>
+            </form>
+        </div>
+
+        <div class="table-container">
+            <h3 style="padding: 20px;">Noticias Publicadas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="news-list">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let editingNewsId = null;
+
+        // Lógica de Alertas
+        function showAlert(message) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.className = `alert alert-success`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 3000);
+        }
+
+        function clearNew() {
+            document.getElementById('news-form').reset();
+            editingNewsId = null;
+            document.getElementById('form-title').textContent = 'Crear Nueva Noticia';
+            document.getElementById('submit-btn').textContent = 'Publicar Noticia';
+        }
+
+        // CARGAR NOTICIAS
+        async function loadNews() {
+            const response = await fetch('/api/news');
+            const news = await response.json();
+            document.getElementById('news-list').innerHTML = news.map(n => `
+                <tr>
+                    <td><strong>${n.title}</strong></td>
+                    <td>${n.author}</td>
+                    <td>${new Date(n.created_at).toLocaleDateString()}</td>
+                    <td>${n.featured ? '⭐ Destacada' : 'Normal'}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editNews(${n.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteNews(${n.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // EDITAR NOTICIA
+        function editNews(id) {
+            fetch(`/api/news/${id}`)
+                .then(res => res.json())
+                .then(news => {
+                    const form = document.getElementById('news-form');
+                    form.querySelector('[name="title"]').value = news.title;
+                    form.querySelector('[name="excerpt"]').value = news.excerpt || '';
+                    form.querySelector('[name="content"]').value = news.content;
+                    form.querySelector('[name="author"]').value = news.author;
+                    form.querySelector('[name="image_url"]').value = news.image_url || '';
+                    form.querySelector('[name="featured"]').checked = news.featured === 1;
+                    
+                    editingNewsId = id;
+                    document.getElementById('form-title').textContent = 'Editando Noticia';
+                    document.getElementById('submit-btn').textContent = 'Actualizar Noticia';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+        }
+
+        // GUARDAR/ACTUALIZAR
+
+        document.getElementById('news-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Usamos FormData directamente del formulario
+            const formData = new FormData(e.target);
+            
+            // Si estás en modo edición, agregamos el ID
+            if (editingNewsId) {
+                formData.append('id', editingNewsId);
+            }
+
+            const url = editingNewsId ? `/api/news/${editingNewsId}` : '/api/news';
+
+            // IMPORTANTE: Al enviar FormData, NO hay que poner 'Content-Type' en el header
+            // El navegador lo configura automáticamente como 'multipart/form-data'
+            await fetch(url, {
+                method: editingNewsId ? 'PUT' : 'POST',
+                body: formData 
+            });
+
+            showAlert(editingNewsId ? '✅ Noticia actualizada' : '✅ Noticia publicada');
+            clearNew();
+            loadNews();
+        });
+        /*document.getElementById('news-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                title: formData.get('title'),
+                excerpt: formData.get('excerpt'),
+                content: formData.get('content'),
+                author: formData.get('author'),
+                image_url: formData.get('image_url'),
+                featured: formData.get('featured') ? 1 : 0
+            };
+            
+            const method = editingNewsId ? 'PUT' : 'POST';
+            const url = editingNewsId ? `/api/news/${editingNewsId}` : '/api/news';
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            showAlert(editingNewsId ? '✅ Noticia actualizada' : '✅ Noticia publicada');
+            clearNew();
+            loadNews();
+        });*/
+
+        // ELIMINAR
+        async function deleteNews(id) {
+            if (!confirm('¿Seguro que desea eliminar esta noticia?')) return;
+            await fetch(`/api/news/${id}`, { method: 'DELETE' });
+            showAlert('✅ Noticia eliminada');
+            loadNews();
+        }
+
+        // Inicialización
+        loadNews();
+    </script>
+</body>
+</html>
